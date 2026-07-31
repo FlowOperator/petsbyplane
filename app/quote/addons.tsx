@@ -157,7 +157,7 @@ export default function AddOnsScreen() {
       <View style={styles.bottomBar}>
         <TouchableOpacity
           style={styles.continueBtn}
-          onPress={() => router.push('/quote/register')}
+          onPress={() => router.push('/quote/checkout')}
           activeOpacity={0.85}
           accessibilityRole="button"
         >

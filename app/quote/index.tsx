@@ -217,6 +217,22 @@ export default function QuoteSearchScreen() {
           </TouchableOpacity>
         </Card>
 
+        {/* Country requirements link */}
+        <TouchableOpacity
+          style={styles.countryRulesCard}
+          onPress={() => router.push('/country-rules')}
+          activeOpacity={0.85}
+        >
+          <View style={styles.countryRulesIcon}>
+            <Ionicons name="globe-outline" size={20} color={colors.primary} />
+          </View>
+          <View style={styles.countryRulesContent}>
+            <Text style={styles.countryRulesTitle}>Browse country requirements</Text>
+            <Text style={styles.countryRulesDesc}>See what's needed for your destination</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+        </TouchableOpacity>
+
         {/* Search button */}
         <TouchableOpacity style={styles.searchBtn} onPress={handleSearch} activeOpacity={0.85}>
           <Ionicons name="paw" size={18} color={colors.textPrimary} />
@@ -379,6 +395,22 @@ const styles = StyleSheet.create({
   fieldValue: { ...typography.body, fontFamily: 'Nunito_700Bold', color: colors.textPrimary },
   fieldPlaceholder: { color: colors.textPlaceholder, fontFamily: 'Nunito_400Regular' },
   fieldDivider: { height: 1, backgroundColor: colors.divider, marginHorizontal: 18 },
+
+  // Country rules link
+  countryRulesCard: {
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    marginHorizontal: layout.screenPaddingHorizontal, marginTop: 16,
+    backgroundColor: colors.white, borderRadius: radius.xl,
+    padding: 16, ...shadows.cardLight,
+    borderWidth: 1, borderColor: colors.borderMedium,
+  },
+  countryRulesIcon: {
+    width: 40, height: 40, borderRadius: 20,
+    backgroundColor: colors.primaryLight, alignItems: 'center', justifyContent: 'center',
+  },
+  countryRulesContent: { flex: 1 },
+  countryRulesTitle: { ...typography.body, fontFamily: 'Nunito_700Bold', color: colors.textPrimary },
+  countryRulesDesc: { ...typography.tiny, color: colors.textSecondary, marginTop: 2 },
 
   // Search button
   searchBtn: {

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { colors, typography, spacing, radius, shadows, layout } from '../../src/theme';
 import { Card, Badge, Button } from '../../src/components/ui';
 import { useAppState } from '../../src/services/store';
@@ -32,7 +33,16 @@ export default function ProfileScreen() {
       >
         {/* Header + tabs */}
         <View style={styles.header}>
-          <Text style={styles.title}>Profile</Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.title}>Profile</Text>
+            <TouchableOpacity
+              style={styles.gearBtn}
+              onPress={() => router.push('/profile-settings')}
+              accessibilityLabel="Settings"
+            >
+              <Ionicons name="settings-outline" size={20} color={colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
           <View style={styles.tabBar}>
             <TouchableOpacity
               style={[styles.tab, activeTab === 'pets' && styles.tabActive]}
@@ -381,6 +391,12 @@ const styles = StyleSheet.create({
     paddingTop: layout.screenPaddingTop, paddingBottom: 14,
   },
   title: { ...typography.h2, color: colors.textPrimary, marginBottom: 16 },
+  titleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  gearBtn: {
+    width: 36, height: 36, borderRadius: 18,
+    backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center',
+    ...shadows.iconButton,
+  },
   tabBar: {
     flexDirection: 'row', backgroundColor: '#E9E4D8',
     borderRadius: radius.pill, padding: 4, gap: 4,

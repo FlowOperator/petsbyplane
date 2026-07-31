@@ -113,7 +113,7 @@ export default function LandingScreen() {
       <View style={styles.bottomArea}>
         <TouchableOpacity
           style={styles.primaryBtn}
-          onPress={() => router.push('/auth/signup')}
+          onPress={() => router.push('/welcome')}
           activeOpacity={0.85}
           accessibilityRole="button"
         >

@@ -34,7 +34,8 @@
       "themeColor": "#E8623D"
     },
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "baseUrl": "/petsbyplane"
     }
   }
 }

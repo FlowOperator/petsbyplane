@@ -12,7 +12,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, spacing, radius, shadows, layout } from '../../src/theme';
 import { Card } from '../../src/components/ui';
 import { useAppState } from '../../src/services/store';
+import { EmptyState } from '../../src/components/EmptyState';
 import { Milestone } from '../../src/types';
+import { router } from 'expo-router';
 
 type JourneyTab = 'before' | 'transit';
 
@@ -27,6 +29,7 @@ export default function JourneyScreen() {
 
   const currentMilestone = milestones.find((m) => m.status === 'current');
   const isInTransit = activeTrip?.status === 'in_transit';
+  const hasTrip = !!activeTrip;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -40,11 +43,27 @@ export default function JourneyScreen() {
             {pet?.name ? `${pet.name}'s Journey` : 'Journey'}
           </Text>
           <Text style={styles.subtitle}>
-            {activeTrip ? `${activeTrip.originAirport} → ${activeTrip.destinationAirport}` : ''}
+            {activeTrip ? `${activeTrip.originAirport} → ${activeTrip.destinationAirport}` : 'Track your pet\'s relocation'}
           </Text>
         </View>
       </View>
 
+      {!hasTrip ? (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <EmptyState
+            icon="navigate-outline"
+            title="No journey yet"
+            description="Once you've booked a relocation, your pet's journey timeline will appear here — from vet checks to wheels-up to reunion."
+            actionLabel="Get a quote"
+            onAction={() => router.push('/quote')}
+          />
+        </ScrollView>
+      ) : (
+        <>
       {/* Tab toggle */}
       <View style={styles.tabContainer}>
         <View style={styles.tabBar}>
@@ -93,6 +112,8 @@ export default function JourneyScreen() {
           />
         )}
       </ScrollView>
+      </>
+      )}
     </SafeAreaView>
   );
 }

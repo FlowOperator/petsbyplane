@@ -16,6 +16,7 @@ import { ShareTrackingButton } from '../../src/components/ShareTrackingButton';
 import { SyncCalendarButton } from '../../src/components/SyncCalendarButton';
 import { BehavetCard } from '../../src/components/BehavetCard';
 import { TrustBadge } from '../../src/components/TrustBadge';
+import { EmptyState } from '../../src/components/EmptyState';
 import { router } from 'expo-router';
 
 export default function HomeScreen() {
@@ -26,6 +27,8 @@ export default function HomeScreen() {
   const pet = pets.find((p) => p.id === activeTrip?.petId);
   const pendingDocs = documents.filter((d) => d.status === 'missing' || d.status === 'expiring_soon');
   const urgentItems = checklist.filter((i) => i.isUrgent || i.isOverdue);
+  const hasTrip = !!activeTrip;
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView
@@ -48,6 +51,22 @@ export default function HomeScreen() {
             <Ionicons name="notifications-outline" size={20} color={colors.textPrimary} />
           </TouchableOpacity>
         </View>
+
+        {/* Empty state when no active trip */}
+        {!hasTrip && (
+          <EmptyState
+            icon="paw"
+            title="Ready to fly your pet?"
+            description="Get a free quote and we'll guide you through everything — vaccinations, crates, paperwork, and the flight itself."
+            actionLabel="Get a quote"
+            onAction={() => router.push('/quote')}
+            secondaryLabel="Learn how it works"
+            onSecondary={() => router.push('/about')}
+          />
+        )}
+
+        {hasTrip && (
+          <>
 
         {/* Active Trip Card */}
         <Card style={styles.tripCard}>
@@ -193,6 +212,8 @@ export default function HomeScreen() {
         <View style={styles.trustWrap}>
           <TrustBadge />
         </View>
+        </>
+        )}
       </ScrollView>
 
       {/* Floating chat FAB */}

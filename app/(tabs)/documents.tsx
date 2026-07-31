@@ -13,6 +13,8 @@ import { Card, Badge, Button } from '../../src/components/ui';
 import { DocumentStatus, DocumentType } from '../../src/types';
 import { useAppState } from '../../src/services/store';
 import { DocumentUploadSheet } from '../../src/components/DocumentUploadSheet';
+import { EmptyState } from '../../src/components/EmptyState';
+import { router } from 'expo-router';
 
 // ─── Helpers ─────────────────────────────────────────────────────────
 
@@ -91,6 +93,7 @@ export default function DocumentsScreen() {
   const tripDocs = documents.filter((d) => d.tripId === activeTrip?.id);
   const completedCount = tripDocs.filter((d) => d.status === 'verified').length;
   const totalCount = tripDocs.length;
+  const hasDocuments = totalCount > 0;
 
   const handleUpload = (docType: any, docName: string) => {
     setUploadDocType({ type: docType, name: docName });
@@ -112,6 +115,7 @@ export default function DocumentsScreen() {
           </Text>
 
           {/* Progress bar */}
+          {hasDocuments && (
           <View style={styles.progressContainer}>
             <View style={styles.progressTrack}>
               <View
@@ -125,9 +129,23 @@ export default function DocumentsScreen() {
               {completedCount} of {totalCount} ready
             </Text>
           </View>
+          )}
         </View>
 
+        {/* Empty state */}
+        {!hasDocuments && (
+          <EmptyState
+            icon="document-text-outline"
+            title="No documents yet"
+            description="Once your booking is confirmed, we'll tell you exactly which documents are needed and when — no guesswork."
+            actionLabel="Get a quote"
+            onAction={() => router.push('/quote')}
+          />
+        )}
+
         {/* Document list */}
+        {hasDocuments && (
+        <>
         <View style={styles.documentList}>
           {tripDocs.map((doc, index) => {
             const badge = getStatusBadge(doc.status);
@@ -183,6 +201,8 @@ export default function DocumentsScreen() {
         <Text style={styles.reassurance}>
           No rush — your consultant will remind you before anything's due.
         </Text>
+        </>
+        )}
       </ScrollView>
 
       {/* Upload sheet */}

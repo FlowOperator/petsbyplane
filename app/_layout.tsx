@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
@@ -41,22 +41,31 @@ export default function RootLayout() {
 
   return (
     <AppProvider>
-      <View style={styles.container} onLayout={onLayoutRootView}>
-        <StatusBar style="dark" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: colors.background },
-          }}
-        />
+      <View style={styles.outer}>
+        <View style={styles.container} onLayout={onLayoutRootView}>
+          <StatusBar style="dark" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: colors.background },
+            }}
+          />
+        </View>
       </View>
     </AppProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  outer: {
+    flex: 1,
+    backgroundColor: colors.backgroundOuter,
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,
+    width: '100%',
+    ...(Platform.OS === 'web' ? { maxWidth: 480 } : {}),
   },
 });

@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 12,
     backgroundColor: colors.white, borderRadius: radius.xl,
     padding: 16, ...shadows.cardLight,
+    flexWrap: 'wrap',
   },
   howStepNumber: {
     width: 26, height: 26, borderRadius: 13,

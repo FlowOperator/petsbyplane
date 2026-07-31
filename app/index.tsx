@@ -113,17 +113,17 @@ export default function LandingScreen() {
       <View style={styles.bottomArea}>
         <TouchableOpacity
           style={styles.primaryBtn}
-          onPress={() => router.push('/quote')}
+          onPress={() => router.push('/auth/signup')}
           activeOpacity={0.85}
           accessibilityRole="button"
         >
           <Ionicons name="paw" size={18} color={colors.textPrimary} />
-          <Text style={styles.primaryBtnText}>Get a quote</Text>
+          <Text style={styles.primaryBtnText}>Get started</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.secondaryBtn}
-          onPress={() => router.push('/(tabs)')}
+          onPress={() => router.push('/auth/signin')}
           activeOpacity={0.85}
           accessibilityRole="button"
         >

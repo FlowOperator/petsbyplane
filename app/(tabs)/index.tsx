@@ -41,9 +41,9 @@ export default function HomeScreen() {
           </View>
           <TouchableOpacity
             style={styles.notificationButton}
-            accessibilityLabel="Settings"
+            accessibilityLabel="Notifications"
             accessibilityRole="button"
-            onPress={() => router.push('/settings')}
+            onPress={() => router.push('/notifications')}
           >
             <Ionicons name="notifications-outline" size={20} color={colors.textPrimary} />
           </TouchableOpacity>

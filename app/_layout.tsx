@@ -66,6 +66,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
     width: '100%',
-    ...(Platform.OS === 'web' ? { maxWidth: 480 } : {}),
+    ...(Platform.OS === 'web' ? {
+      maxWidth: 480,
+      boxShadow: '0 0 40px rgba(46, 40, 34, 0.12)',
+      overflow: 'hidden',
+    } as any : {}),
   },
 });

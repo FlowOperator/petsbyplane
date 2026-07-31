@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { View, StyleSheet, ColorValue } from 'react-native';
+import { View, StyleSheet, ColorValue, Platform } from 'react-native';
 import { colors, shadows, typography } from '../../src/theme';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -29,6 +29,7 @@ export default function TabLayout() {
           borderTopWidth: 1,
           borderTopColor: colors.border,
           ...shadows.tabBar,
+          ...(Platform.OS === 'web' ? { position: 'sticky' as any, bottom: 0 } : {}),
         },
       }}
     >

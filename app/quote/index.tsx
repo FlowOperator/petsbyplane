@@ -13,7 +13,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, spacing, radius, shadows, layout } from '../../src/theme';
 import { Card, Button } from '../../src/components/ui';
 import { TrustBadge } from '../../src/components/TrustBadge';
+import { AccreditationBadges } from '../../src/components/AccreditationBadges';
 import { PetSpecies, TripDirection } from '../../src/types';
+import { useQuoteFlow } from '../../src/services/quoteContext';
 
 /**
  * Quote Search Screen — Step 1 of 4
@@ -21,6 +23,7 @@ import { PetSpecies, TripDirection } from '../../src/types';
  * From → To → Date → Pet/Breed → Search
  */
 export default function QuoteSearchScreen() {
+  const { quoteDispatch } = useQuoteFlow();
   const [direction, setDirection] = useState<TripDirection>('export');
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
@@ -29,6 +32,19 @@ export default function QuoteSearchScreen() {
   const [breed, setBreed] = useState('');
 
   const handleSearch = () => {
+    quoteDispatch({
+      type: 'SET_SEARCH_PARAMS',
+      payload: {
+        direction,
+        originCity: origin || 'London',
+        originAirport: 'LHR',
+        destinationCity: destination || 'Cape Town',
+        destinationAirport: 'CPT',
+        travelDate: travelDate || '2026-07-15',
+        petSpecies: petType,
+        breed: breed || 'Akita',
+      },
+    });
     router.push('/quote/results');
   };
 
@@ -168,6 +184,11 @@ export default function QuoteSearchScreen() {
             <Text style={styles.searchButtonText}>Search flights</Text>
           </TouchableOpacity>
         </Card>
+
+        {/* Accreditations */}
+        <View style={styles.accreditationRow}>
+          <AccreditationBadges layout="row" />
+        </View>
 
         {/* Popular routes */}
         <Text style={styles.sectionTitle}>Popular pet routes</Text>
@@ -375,6 +396,12 @@ const styles = StyleSheet.create({
   searchButtonText: {
     ...typography.button,
     color: colors.textPrimary,
+  },
+
+  // Accreditations
+  accreditationRow: {
+    marginTop: 12,
+    marginHorizontal: layout.screenPaddingHorizontal,
   },
 
   // Popular routes

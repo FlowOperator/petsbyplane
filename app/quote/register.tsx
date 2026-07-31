@@ -13,6 +13,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { Card } from '../../src/components/ui';
 import { AcceptanceCard } from '../../src/components/AcceptanceCard';
+import { useQuoteFlow } from '../../src/services/quoteContext';
+import { useAppState } from '../../src/services/store';
+import { createBookingFromQuote } from '../../src/services/quoteService';
 
 /**
  * Register Screen — Step 4 of 4
@@ -26,6 +29,26 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [petName, setPetName] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const { quoteState } = useQuoteFlow();
+  const { dispatch } = useAppState();
+
+  const handleCreateAccount = () => {
+    if (!quoteState.searchParams || !quoteState.selectedFlight) {
+      router.replace('/(tabs)');
+      return;
+    }
+
+    createBookingFromQuote(
+      quoteState.searchParams,
+      quoteState.selectedFlight,
+      quoteState.selectedAddOns,
+      { firstName, surname, email, phone, petName },
+      dispatch
+    );
+
+    router.replace('/(tabs)');
+  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -172,7 +195,7 @@ export default function RegisterScreen() {
       <View style={styles.bottomBar}>
         <TouchableOpacity
           style={[styles.createBtn, !termsAccepted && styles.createBtnDisabled]}
-          onPress={() => router.replace('/(tabs)')}
+          onPress={handleCreateAccount}
           disabled={!termsAccepted}
           activeOpacity={0.85}
           accessibilityRole="button"

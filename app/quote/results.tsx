@@ -11,6 +11,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { Badge } from '../../src/components/ui';
+import { useQuoteFlow } from '../../src/services/quoteContext';
 
 /**
  * Quote Results Screen — Step 2 of 4
@@ -36,6 +37,20 @@ const MOCK_RESULTS: RouteResult[] = [
 ];
 
 export default function QuoteResultsScreen() {
+  const { quoteDispatch } = useQuoteFlow();
+
+  const handleSelect = (result: RouteResult) => {
+    quoteDispatch({
+      type: 'SET_SELECTED_FLIGHT',
+      payload: {
+        airline: result.airline,
+        price: result.price,
+        route: result.route,
+        via: result.via,
+      },
+    });
+    router.push('/quote/addons');
+  };
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       {/* Progress bar */}
@@ -64,7 +79,7 @@ export default function QuoteResultsScreen() {
               styles.resultCard,
               result.isCheapest && styles.resultCardCheapest,
             ]}
-            onPress={() => router.push('/quote/addons')}
+            onPress={() => handleSelect(result)}
             activeOpacity={0.85}
             accessibilityRole="button"
             accessibilityLabel={`${result.airline}, ${result.route}, £${result.price}`}
@@ -108,7 +123,7 @@ export default function QuoteResultsScreen() {
                 <Text style={styles.price}>£{result.price.toLocaleString()}</Text>
                 <TouchableOpacity
                   style={styles.selectBtn}
-                  onPress={() => router.push('/quote/addons')}
+                  onPress={() => handleSelect(result)}
                   accessibilityRole="button"
                 >
                   <Text style={styles.selectBtnText}>Select →</Text>

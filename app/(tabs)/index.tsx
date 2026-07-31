@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +12,11 @@ import { colors, typography, spacing, radius, shadows, layout } from '../../src/
 import { Card, Badge, Button } from '../../src/components/ui';
 import { useAppState } from '../../src/services/store';
 import { useRequirements } from '../../src/hooks/useRequirements';
+import { ShareTrackingButton } from '../../src/components/ShareTrackingButton';
+import { SyncCalendarButton } from '../../src/components/SyncCalendarButton';
+import { BehavetCard } from '../../src/components/BehavetCard';
+import { TrustBadge } from '../../src/components/TrustBadge';
+import { router } from 'expo-router';
 
 export default function HomeScreen() {
   const { state } = useAppState();
@@ -37,8 +41,9 @@ export default function HomeScreen() {
           </View>
           <TouchableOpacity
             style={styles.notificationButton}
-            accessibilityLabel="Notifications"
+            accessibilityLabel="Settings"
             accessibilityRole="button"
+            onPress={() => router.push('/settings')}
           >
             <Ionicons name="notifications-outline" size={20} color={colors.textPrimary} />
           </TouchableOpacity>
@@ -167,6 +172,21 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
         </Card>
+        {/* Quick actions */}
+        <View style={styles.quickActions}>
+          <ShareTrackingButton />
+          <SyncCalendarButton />
+        </View>
+
+        {/* BEHAVET card */}
+        <View style={styles.behavetWrap}>
+          <BehavetCard />
+        </View>
+
+        {/* Trustindex */}
+        <View style={styles.trustWrap}>
+          <TrustBadge />
+        </View>
       </ScrollView>
 
       {/* Floating chat FAB */}
@@ -174,6 +194,7 @@ export default function HomeScreen() {
         style={styles.fab}
         accessibilityLabel="Chat with consultant"
         accessibilityRole="button"
+        onPress={() => router.push('/(tabs)/messages')}
       >
         <Ionicons name="chatbubble" size={22} color={colors.white} />
       </TouchableOpacity>
@@ -488,6 +509,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  // Quick actions
+  quickActions: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
+    marginHorizontal: layout.screenPaddingHorizontal,
+    marginTop: 16,
+  },
+  behavetWrap: {
+    marginHorizontal: layout.screenPaddingHorizontal,
+    marginTop: 14,
+  },
+  trustWrap: {
+    alignItems: 'center',
+    marginTop: 16,
+    marginBottom: 20,
   },
 
   // FAB

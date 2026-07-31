@@ -11,6 +11,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { Card, Button } from '../../src/components/ui';
+import { ProgressSteps } from '../../src/components/ProgressSteps';
 
 /**
  * Add-ons Screen — Step 3 of 4
@@ -56,12 +57,7 @@ export default function AddOnsScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       {/* Progress */}
-      <View style={styles.progressRow}>
-        <View style={[styles.progressDot, styles.progressActive]} />
-        <View style={[styles.progressDot, styles.progressActive]} />
-        <View style={[styles.progressDot, styles.progressActive]} />
-        <View style={styles.progressDot} />
-      </View>
+      <ProgressSteps total={4} current={3} />
 
       <ScrollView
         style={styles.scrollView}
@@ -170,13 +166,6 @@ export default function AddOnsScreen() {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.background },
-  progressRow: {
-    flexDirection: 'row', gap: 6,
-    paddingHorizontal: layout.screenPaddingHorizontal,
-    paddingTop: 16, marginBottom: 16,
-  },
-  progressDot: { flex: 1, height: 4, borderRadius: 2, backgroundColor: '#E4DFD4' },
-  progressActive: { backgroundColor: colors.primary },
   scrollView: { flex: 1 },
   scrollContent: {
     paddingHorizontal: layout.screenPaddingHorizontal,
@@ -218,8 +207,7 @@ const styles = StyleSheet.create({
   },
   routeDashLine: {
     position: 'absolute', left: 0, right: 0, top: '50%',
-    height: 1.5, borderTopWidth: 1.5,
-    borderStyle: 'dashed', borderColor: colors.textMuted,
+    height: 1.5, backgroundColor: 'rgba(107, 98, 89, 0.25)',
   },
   routeArrow: { zIndex: 1, backgroundColor: colors.white, paddingHorizontal: 4 },
   routeViaLabel: {

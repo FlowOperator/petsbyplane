@@ -11,6 +11,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { Badge } from '../../src/components/ui';
+import { ProgressSteps } from '../../src/components/ProgressSteps';
 import { useQuoteFlow } from '../../src/services/quoteContext';
 
 /**
@@ -54,12 +55,7 @@ export default function QuoteResultsScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       {/* Progress bar */}
-      <View style={styles.progressRow}>
-        <View style={[styles.progressDot, styles.progressActive]} />
-        <View style={[styles.progressDot, styles.progressActive]} />
-        <View style={styles.progressDot} />
-        <View style={styles.progressDot} />
-      </View>
+      <ProgressSteps total={4} current={2} />
 
       {/* Results count */}
       <Text style={styles.resultsInfo}>
@@ -139,24 +135,6 @@ export default function QuoteResultsScreen() {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.background },
-
-  // Progress
-  progressRow: {
-    flexDirection: 'row',
-    gap: 6,
-    paddingHorizontal: layout.screenPaddingHorizontal,
-    paddingTop: 16,
-    marginBottom: 14,
-  },
-  progressDot: {
-    flex: 1,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: '#E4DFD4',
-  },
-  progressActive: {
-    backgroundColor: colors.primary,
-  },
 
   resultsInfo: {
     ...typography.caption,

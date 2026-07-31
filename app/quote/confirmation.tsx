@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   routeCode: { fontFamily: 'Baloo2_700Bold', fontSize: 22, color: colors.textPrimary },
   routeCity: { ...typography.tiny, color: colors.textSecondary, marginTop: 2 },
   routeMiddle: { flex: 1, flexDirection: 'row', alignItems: 'center', marginHorizontal: 12 },
-  routeDash: { flex: 1, height: 1.5, borderTopWidth: 1.5, borderStyle: 'dashed', borderColor: colors.primaryBorder },
+  routeDash: { flex: 1, height: 1.5, backgroundColor: 'rgba(232, 98, 61, 0.3)' },
 
   // Tear line
   tearLine: { flexDirection: 'row', alignItems: 'center', marginVertical: 12 },
@@ -164,8 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background, marginLeft: -28,
   },
   tearDashes: {
-    flex: 1, height: 1, borderTopWidth: 1.5,
-    borderStyle: 'dashed', borderColor: colors.divider, marginHorizontal: 4,
+    flex: 1, height: 1, backgroundColor: colors.divider, marginHorizontal: 4,
   },
   tearCircleRight: {
     width: 16, height: 16, borderRadius: 8,

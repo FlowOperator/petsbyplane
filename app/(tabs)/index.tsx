@@ -126,10 +126,14 @@ export default function HomeScreen() {
             </View>
             <View style={styles.actionContent}>
               <Text style={styles.actionTitle}>
-                Upload Darcy's rabies vaccination record
+                {pendingDocs.length > 0
+                  ? `Upload ${pet?.name || 'your pet'}'s ${pendingDocs[0]?.name || 'document'}`
+                  : 'All documents uploaded'}
               </Text>
               <Text style={styles.actionSubtitle}>
-                Needed before the titre test can be booked
+                {pendingDocs.length > 0
+                  ? 'Must be completed within 10 days of departure'
+                  : 'Your consultant will verify everything'}
               </Text>
             </View>
           </View>
@@ -137,21 +141,23 @@ export default function HomeScreen() {
 
         <Button
           title="Upload now"
-          onPress={() => {}}
+          onPress={() => router.push('/(tabs)/documents')}
           variant="primary"
           style={styles.uploadButton}
         />
 
         {/* Deadline countdown */}
-        <View style={styles.deadlineCard}>
-          <View style={styles.deadlineCircle}>
-            <Text style={styles.deadlineNumber}>3d</Text>
+        {urgentItems.length > 0 && (
+          <View style={styles.deadlineCard}>
+            <View style={styles.deadlineCircle}>
+              <Text style={styles.deadlineNumber}>{urgentItems[0].daysRemaining}d</Text>
+            </View>
+            <Text style={styles.deadlineText}>
+              {urgentItems[0].daysRemaining} days left until {pet?.name || "your pet"}'s{' '}
+              <Text style={{ color: colors.primary }}>{urgentItems[0].requirement.title}</Text> deadline
+            </Text>
           </View>
-          <Text style={styles.deadlineText}>
-            3 days left until Darcy's{' '}
-            <Text style={{ color: colors.primary }}>titre test window</Text> closes
-          </Text>
-        </View>
+        )}
 
         {/* Consultant card */}
         <Card style={styles.consultantCard}>

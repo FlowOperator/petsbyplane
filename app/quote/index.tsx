@@ -21,10 +21,10 @@ import { useQuoteFlow } from '../../src/services/quoteContext';
 import { getBreedsForSpecies } from '../../src/data/breeds';
 import { searchAirports, AIRPORTS, POPULAR_ROUTES } from '../../src/data/airports';
 
-// Pet type images
-const DogImage = require('../../src/assets/Dog.svg');
-const CatImage = require('../../src/assets/Cat.svg');
-const BirdImage = require('../../src/assets/Bird.svg');
+// Pet type images — from assets folder for web compatibility
+const DogImage = require('../../assets/dog.svg');
+const CatImage = require('../../assets/cat.svg');
+const BirdImage = require('../../assets/bird.svg');
 
 type PetOption = { species: PetSpecies; label: string; image: any; iconFallback: string };
 const PET_OPTIONS: PetOption[] = [

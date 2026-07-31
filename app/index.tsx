@@ -15,8 +15,8 @@ import { colors, typography, radius, shadows, layout } from '../src/theme';
 import { TrustBadge } from '../src/components/TrustBadge';
 import { AccreditationBadges } from '../src/components/AccreditationBadges';
 
-// SVG assets — works on web via require, native needs react-native-svg-transformer
-const DogImage = require('../src/assets/Dog.svg');
+// SVG assets — use platform-appropriate rendering
+const DogImage = require('../assets/dog.svg');
 
 /**
  * Landing Page — first screen when app is opened.

@@ -5,6 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Image,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -12,6 +14,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../src/theme';
 import { TrustBadge } from '../src/components/TrustBadge';
 import { AccreditationBadges } from '../src/components/AccreditationBadges';
+
+// SVG assets — works on web via require, native needs react-native-svg-transformer
+const DogImage = require('../src/assets/Dog.svg');
 
 /**
  * Landing Page — first screen when app is opened.
@@ -28,8 +33,14 @@ export default function LandingScreen() {
       >
         {/* Logo + brand */}
         <View style={styles.brandArea}>
-          <View style={styles.logoCircle}>
-            <Ionicons name="paw" size={36} color={colors.primary} />
+          {/* Hero illustration */}
+          <View style={styles.illustrationWrap}>
+            <Image
+              source={DogImage}
+              style={styles.heroIllustration}
+              resizeMode="contain"
+              accessibilityLabel="Hand-drawn dog with airplane illustration"
+            />
           </View>
           <Text style={styles.brandName}>Pets by Plane</Text>
           <Text style={styles.motto}>"We Care in the Air"</Text>
@@ -146,12 +157,14 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: layout.screenPaddingHorizontal, paddingBottom: 20 },
 
   // Brand
-  brandArea: { alignItems: 'center', paddingTop: 40, marginBottom: 24 },
-  logoCircle: {
-    width: 72, height: 72, borderRadius: 36,
-    backgroundColor: colors.primaryLight,
+  brandArea: { alignItems: 'center', paddingTop: 30, marginBottom: 20 },
+  illustrationWrap: {
+    width: 180, height: 200,
     alignItems: 'center', justifyContent: 'center',
-    marginBottom: 14,
+    marginBottom: 12,
+  },
+  heroIllustration: {
+    width: 170, height: 190,
   },
   brandName: {
     fontFamily: 'Baloo2_700Bold', fontSize: 26, color: colors.textPrimary,

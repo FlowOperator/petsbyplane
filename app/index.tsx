@@ -1,251 +1,263 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   Image,
-  Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { colors, typography, radius, shadows, layout } from '../src/theme';
-import { TrustBadge } from '../src/components/TrustBadge';
-import { AccreditationBadges } from '../src/components/AccreditationBadges';
+import { colors, typography, radius } from '../src/theme';
 
-// SVG assets — use platform-appropriate rendering
 const DogImage = require('../assets/dog.svg');
 
+const SLIDES = [
+  {
+    title: 'Family-run,\nsince day one',
+    body: "We've relocated thousands of pets worldwide, treating every animal like our own.",
+  },
+  {
+    title: 'We handle\nevery detail',
+    body: 'Flights, paperwork, crates and customs — all coordinated by your dedicated consultant.',
+  },
+  {
+    title: 'Track the\nwhole journey',
+    body: "See exactly where your pet is and what's next, right up to the moment you're reunited.",
+  },
+];
+
 /**
- * Landing Page — first screen when app is opened.
- * New users: see brand intro → tap to get a quote or sign in.
- * Returning users: would be auto-directed to (tabs) via auth check.
+ * Welcome Screen — 3-slide carousel with dark full-bleed background.
+ * Primary CTA goes to quote form. Skip also goes to quote form.
+ * Sign in for returning users.
  */
-export default function LandingScreen() {
+export default function WelcomeScreen() {
+  const [slide, setSlide] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Auto-advance slides every 4 seconds
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setSlide((s) => (s + 1) % 3);
+    }, 4000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  const current = SLIDES[slide];
+
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
+    <View style={styles.container}>
+      {/* Hero image area */}
+      <View style={styles.heroArea}>
+        <Image
+          source={DogImage}
+          style={styles.heroImage}
+          resizeMode="contain"
+          accessibilityLabel="Hand-drawn dog illustration"
+        />
+      </View>
+
+      {/* Gradient overlay */}
+      <View style={styles.gradientOverlay} />
+
+      {/* Skip */}
+      <TouchableOpacity
+        style={styles.skipBtn}
+        onPress={() => router.push('/quote')}
+        accessibilityRole="button"
       >
-        {/* Logo + brand */}
-        <View style={styles.brandArea}>
-          {/* Hero illustration */}
-          <View style={styles.illustrationWrap}>
-            <Image
-              source={DogImage}
-              style={styles.heroIllustration}
-              resizeMode="contain"
-              accessibilityLabel="Hand-drawn dog with airplane illustration"
-            />
-          </View>
-          <Text style={styles.brandName}>Pets by Plane</Text>
-          <Text style={styles.motto}>"We Care in the Air"</Text>
-        </View>
+        <Text style={styles.skipText}>Skip</Text>
+      </TouchableOpacity>
 
-        {/* Hero text */}
-        <View style={styles.heroArea}>
-          <Text style={styles.heroTitle}>
-            Fly your pet{'\n'}anywhere in the world
-          </Text>
-          <Text style={styles.heroSubtitle}>
-            Expert-led pet relocation with a dedicated consultant guiding
-            every step. Visible, trackable, stress-free.
-          </Text>
-        </View>
+      {/* Slide content */}
+      <View style={styles.slideArea}>
+        <Text style={styles.slideTitle}>{current.title}</Text>
+        <Text style={styles.slideBody}>{current.body}</Text>
+      </View>
 
-        {/* Trust badges */}
-        <AccreditationBadges layout="row" />
+      {/* Dots */}
+      <View style={styles.dotsRow}>
+        {SLIDES.map((_, i) => (
+          <TouchableOpacity
+            key={i}
+            onPress={() => setSlide(i)}
+            style={[styles.dot, i === slide && styles.dotActive]}
+          />
+        ))}
+      </View>
 
-        {/* Stats strip */}
-        <View style={styles.statsStrip}>
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>25+</Text>
-            <Text style={styles.statLabel}>Years</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>5,000+</Text>
-            <Text style={styles.statLabel}>Pets flown</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>150+</Text>
-            <Text style={styles.statLabel}>Destinations</Text>
-          </View>
-        </View>
-
-        {/* How it works */}
-        <View style={styles.howSection}>
-          <Text style={styles.howTitle}>How it works</Text>
-          <View style={styles.howSteps}>
-            <HowStep
-              number="1"
-              icon="chatbubbles-outline"
-              title="Get a quote"
-              desc="Tell us about your pet and destination"
-            />
-            <HowStep
-              number="2"
-              icon="person-outline"
-              title="Dedicated consultant"
-              desc="A named expert handles everything"
-            />
-            <HowStep
-              number="3"
-              icon="location-outline"
-              title="Track live"
-              desc="Follow your pet's journey in real-time"
-            />
-          </View>
-        </View>
-
-        {/* Trustindex */}
-        <View style={styles.trustRow}>
-          <TrustBadge />
-        </View>
-      </ScrollView>
-
-      {/* Bottom CTAs */}
+      {/* Bottom actions */}
       <View style={styles.bottomArea}>
         <TouchableOpacity
           style={styles.primaryBtn}
-          onPress={() => router.push('/welcome')}
+          onPress={() => router.push('/quote')}
           activeOpacity={0.85}
-          accessibilityRole="button"
         >
-          <Ionicons name="paw" size={18} color={colors.textPrimary} />
-          <Text style={styles.primaryBtnText}>Get started</Text>
+          <Text style={styles.primaryBtnText}>Get a free quote</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.secondaryBtn}
+          style={styles.signInBtn}
           onPress={() => router.push('/auth/signin')}
           activeOpacity={0.85}
-          accessibilityRole="button"
         >
-          <Text style={styles.secondaryBtnText}>I already have an account</Text>
+          <Text style={styles.signInBtnText}>Sign in</Text>
         </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-}
 
-function HowStep({ number, icon, title, desc }: {
-  number: string; icon: keyof typeof Ionicons.glyphMap; title: string; desc: string;
-}) {
-  return (
-    <View style={styles.howStep}>
-      <View style={styles.howStepNumber}>
-        <Text style={styles.howStepNumberText}>{number}</Text>
+        <Text style={styles.createText}>
+          New here?{' '}
+          <Text style={styles.createLink} onPress={() => router.push('/auth/signup')}>
+            Create an account
+          </Text>
+        </Text>
+
+        <Text style={styles.legalText}>
+          By continuing, you agree to our Terms and Privacy Policy
+        </Text>
       </View>
-      <View style={styles.howStepIcon}>
-        <Ionicons name={icon} size={22} color={colors.primary} />
-      </View>
-      <Text style={styles.howStepTitle}>{title}</Text>
-      <Text style={styles.howStepDesc}>{desc}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: colors.background },
-  container: { flex: 1 },
-  content: { paddingHorizontal: layout.screenPaddingHorizontal, paddingBottom: 20 },
-
-  // Brand
-  brandArea: { alignItems: 'center', paddingTop: 30, marginBottom: 20 },
-  illustrationWrap: {
-    width: 180, height: 200,
-    alignItems: 'center', justifyContent: 'center',
-    marginBottom: 12,
-  },
-  heroIllustration: {
-    width: 170, height: 190,
-  },
-  brandName: {
-    fontFamily: 'Baloo2_700Bold', fontSize: 26, color: colors.textPrimary,
-  },
-  motto: {
-    ...typography.bodySmall, fontFamily: 'Nunito_600SemiBold',
-    color: colors.textSecondary, fontStyle: 'italic', marginTop: 4,
+  container: {
+    flex: 1,
+    backgroundColor: '#2E2822',
   },
 
   // Hero
-  heroArea: { alignItems: 'center', marginBottom: 20 },
-  heroTitle: {
-    fontFamily: 'Baloo2_700Bold', fontSize: 30, lineHeight: 38,
-    color: colors.textPrimary, textAlign: 'center',
+  heroArea: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '55%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  heroSubtitle: {
-    ...typography.body, color: colors.textSecondary,
-    textAlign: 'center', marginTop: 10, lineHeight: 22,
-    paddingHorizontal: 10,
+  heroImage: {
+    width: 200,
+    height: 240,
+    opacity: 0.85,
+  },
+  gradientOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'transparent',
+    // Simulate gradient with a semi-transparent overlay at the bottom
+    borderBottomWidth: 0,
   },
 
-  // Stats
-  statsStrip: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: colors.white, borderRadius: radius.xl,
-    paddingVertical: 16, paddingHorizontal: 12,
-    marginTop: 16, ...shadows.cardLight,
+  // Skip
+  skipBtn: {
+    position: 'absolute',
+    top: 50,
+    right: 22,
+    zIndex: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
-  statItem: { flex: 1, alignItems: 'center' },
-  statDivider: { width: 1, height: 30, backgroundColor: colors.divider },
-  statNumber: { fontFamily: 'Baloo2_700Bold', fontSize: 18, color: colors.primary },
-  statLabel: { ...typography.tiny, color: colors.textSecondary, marginTop: 2 },
+  skipText: {
+    color: '#F1EEE7',
+    fontSize: 13,
+    fontFamily: 'Nunito_700Bold',
+  },
 
-  // How it works
-  howSection: { marginTop: 28 },
-  howTitle: { ...typography.h4, color: colors.textPrimary, textAlign: 'center', marginBottom: 16 },
-  howSteps: { gap: 12 },
-  howStep: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: colors.white, borderRadius: radius.xl,
-    padding: 16, ...shadows.cardLight,
-    flexWrap: 'wrap',
+  // Slide content
+  slideArea: {
+    position: 'absolute',
+    left: 24,
+    right: 24,
+    bottom: 250,
   },
-  howStepNumber: {
-    width: 26, height: 26, borderRadius: 13,
-    backgroundColor: colors.primary,
-    alignItems: 'center', justifyContent: 'center',
+  slideTitle: {
+    color: '#FFFFFF',
+    fontFamily: 'Baloo2_700Bold',
+    fontSize: 26,
+    lineHeight: 32,
   },
-  howStepNumberText: {
-    ...typography.tiny, fontFamily: 'Nunito_700Bold', color: colors.white,
+  slideBody: {
+    color: 'rgba(241, 238, 231, 0.85)',
+    fontSize: 14,
+    fontFamily: 'Nunito_400Regular',
+    marginTop: 10,
+    lineHeight: 22,
   },
-  howStepIcon: {
-    width: 40, height: 40, borderRadius: 20,
-    backgroundColor: colors.primaryLight,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  howStepTitle: { ...typography.body, fontFamily: 'Nunito_700Bold', color: colors.textPrimary },
-  howStepDesc: { ...typography.tiny, color: colors.textSecondary, flex: 1 },
 
-  // Trust
-  trustRow: { alignItems: 'center', marginTop: 20 },
+  // Dots
+  dotsRow: {
+    position: 'absolute',
+    left: 24,
+    bottom: 225,
+    flexDirection: 'row',
+    gap: 7,
+  },
+  dot: {
+    width: 7,
+    height: 7,
+    borderRadius: 999,
+    backgroundColor: 'rgba(241, 238, 231, 0.35)',
+  },
+  dotActive: {
+    width: 20,
+    backgroundColor: '#EFC26C',
+  },
 
   // Bottom
   bottomArea: {
-    paddingHorizontal: layout.screenPaddingHorizontal,
-    paddingTop: 12, paddingBottom: 20,
-    borderTopWidth: 1, borderTopColor: colors.border,
-    backgroundColor: colors.background,
-    gap: 10,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 24,
+    paddingBottom: 34,
+    gap: 12,
   },
   primaryBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: colors.secondary,
-    borderRadius: radius.pill, paddingVertical: 16,
-    ...shadows.button,
+    backgroundColor: '#EFC26C',
+    borderRadius: radius.pill,
+    paddingVertical: 15,
+    alignItems: 'center',
   },
-  primaryBtnText: { ...typography.button, color: colors.textPrimary },
-  secondaryBtn: {
-    alignItems: 'center', paddingVertical: 12,
+  primaryBtnText: {
+    color: '#2E2822',
+    fontFamily: 'Nunito_700Bold',
+    fontSize: 15,
   },
-  secondaryBtnText: {
-    ...typography.body, fontFamily: 'Nunito_700Bold', color: colors.primary,
+  signInBtn: {
+    borderWidth: 1.5,
+    borderColor: 'rgba(241, 238, 231, 0.4)',
+    backgroundColor: 'rgba(241, 238, 231, 0.1)',
+    borderRadius: radius.pill,
+    paddingVertical: 13,
+    alignItems: 'center',
+  },
+  signInBtnText: {
+    color: '#F1EEE7',
+    fontFamily: 'Nunito_700Bold',
+    fontSize: 15,
+  },
+  createText: {
+    textAlign: 'center',
+    color: 'rgba(241, 238, 231, 0.7)',
+    fontSize: 12.5,
+    fontFamily: 'Nunito_400Regular',
+  },
+  createLink: {
+    color: '#EFC26C',
+    fontFamily: 'Nunito_700Bold',
+  },
+  legalText: {
+    textAlign: 'center',
+    color: 'rgba(241, 238, 231, 0.55)',
+    fontSize: 11,
+    lineHeight: 16,
+    marginTop: 2,
+    fontFamily: 'Nunito_400Regular',
   },
 });

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform, Text } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
@@ -16,6 +16,7 @@ import {
 import * as SplashScreen from 'expo-splash-screen';
 import { colors } from '../src/theme';
 import { AppProvider } from '../src/services/AppProvider';
+import { Ionicons } from '@expo/vector-icons';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,7 +37,13 @@ export default function RootLayout() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null;
+    // Minimal loading state while fonts load
+    return (
+      <View style={styles.loadingContainer}>
+        <Ionicons name="paw" size={40} color="#E8623D" />
+        <Text style={styles.loadingText}>Pets by Plane</Text>
+      </View>
+    );
   }
 
   return (
@@ -71,5 +78,16 @@ const styles = StyleSheet.create({
       boxShadow: '0 0 40px rgba(46, 40, 34, 0.12)',
       overflow: 'hidden',
     } as any : {}),
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#F1EEE7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  loadingText: {
+    fontSize: 20,
+    color: '#2E2822',
   },
 });

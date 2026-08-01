@@ -15,7 +15,6 @@ import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { Card } from '../../src/components/ui';
 import { useQuoteFlow } from '../../src/services/quoteContext';
 import { useAppState } from '../../src/services/store';
-import { createBookingFromQuote } from '../../src/services/quoteService';
 
 /**
  * Payment Method Screen — card entry for the deposit.
@@ -34,16 +33,89 @@ export default function PaymentScreen() {
   const [postcode, setPostcode] = useState('');
 
   const handlePay = () => {
-    // Create booking in state
-    if (quoteState.searchParams && quoteState.selectedFlight) {
-      createBookingFromQuote(
-        quoteState.searchParams,
-        quoteState.selectedFlight,
-        quoteState.selectedAddOns,
-        { firstName: cardName.split(' ')[0] || 'Pet', surname: cardName.split(' ').slice(1).join(' ') || 'Owner', email: '', phone: '', petName: 'Darcy' },
-        dispatch
-      );
+    // Create the booking — this flips hasBooking to true
+    const search = quoteState.searchParams;
+    const flight = quoteState.selectedFlight;
+    
+    if (search && flight) {
+      const now = new Date().toISOString();
+      const tripId = `trip-${Date.now()}`;
+      
+      dispatch({
+        type: 'SET_BOOKING',
+        payload: {
+          owner: {
+            id: `owner-${Date.now()}`,
+            firstName: cardName.split(' ')[0] || 'Alex',
+            surname: cardName.split(' ').slice(1).join(' ') || 'Owner',
+            email: '',
+            phone: '',
+            preferredLanguage: 'en',
+            mediaConsent: true,
+            pets: [`pet-${Date.now()}`],
+            createdAt: now,
+          },
+          pet: {
+            id: `pet-${Date.now()}`,
+            ownerId: `owner-${Date.now()}`,
+            name: 'Darcy',
+            species: search.petSpecies || 'dog',
+            breed: search.breed || 'Labrador Retriever',
+            dateOfBirth: '2022-03-12',
+            weight: 28,
+            microchipNumber: '981 000 012 345 678',
+            documentStatus: 'pending',
+            createdAt: now,
+            updatedAt: now,
+          },
+          trip: {
+            id: tripId,
+            ownerId: `owner-${Date.now()}`,
+            petId: `pet-${Date.now()}`,
+            direction: search.direction || 'export',
+            status: 'deposit_pending',
+            originCity: search.originCity,
+            originAirport: search.originAirport,
+            destinationCity: search.destinationCity,
+            destinationAirport: search.destinationAirport,
+            travelDate: search.travelDate,
+            flight: {
+              airline: flight.airline,
+              flightNumber: '',
+              route: flight.route,
+              departureTime: '',
+              arrivalTime: '',
+              confirmed: false,
+            },
+            payments: [],
+            milestones: [
+              { id: `ms-1`, tripId, order: 1, title: 'Initial consultation & quote', description: 'Quote accepted, deposit paid', status: 'completed', completedAt: now },
+              { id: `ms-2`, tripId, order: 2, title: 'Veterinary requirements', description: 'Vaccinations and blood tests', status: 'current', estimatedDate: search.travelDate },
+              { id: `ms-3`, tripId, order: 3, title: 'Route planning & flight booking', description: 'Airline confirmation', status: 'upcoming' },
+              { id: `ms-4`, tripId, order: 4, title: 'IATA crate delivery', description: 'Crate delivered for acclimatisation', status: 'upcoming' },
+              { id: `ms-5`, tripId, order: 5, title: 'Export preparation', description: 'Health certificates and permits', status: 'upcoming' },
+              { id: `ms-6`, tripId, order: 6, title: 'Collection & check-in', description: 'Pet collected and checked in', status: 'upcoming' },
+              { id: `ms-7`, tripId, order: 7, title: 'Arrival & reunion', description: 'Landing and customs clearance', status: 'upcoming' },
+            ],
+            createdAt: now,
+            updatedAt: now,
+          },
+          consultant: {
+            id: 'cons-001',
+            name: 'Sarah Whitfield',
+            phone: '+44 1903 741 000',
+            email: 'sarah@petsbyplane.com',
+            isOnline: true,
+          },
+          documents: [
+            { id: 'doc-1', petId: `pet-${Date.now()}`, tripId, type: 'rabies_vaccination', name: 'Rabies vaccination record', description: 'Must be 30+ days before travel', status: 'missing' },
+            { id: 'doc-2', petId: `pet-${Date.now()}`, tripId, type: 'microchip_confirmation', name: 'Microchip confirmation', description: '15-digit ISO microchip', status: 'missing' },
+            { id: 'doc-3', petId: `pet-${Date.now()}`, tripId, type: 'health_screening', name: 'Blood tests', description: 'Required for destination', status: 'missing' },
+          ],
+        },
+      });
     }
+    
     router.push('/quote/confirmation');
   };
 

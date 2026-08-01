@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../src/theme';
 import { TrustBadge } from '../src/components/TrustBadge';
 import { AccreditationBadges } from '../src/components/AccreditationBadges';
-import { useAppState } from '../src/services/store';
 
 // SVG assets — use platform-appropriate rendering
 const DogImage = require('../assets/dog.svg');
@@ -25,15 +24,6 @@ const DogImage = require('../assets/dog.svg');
  * Returning users: would be auto-directed to (tabs) via auth check.
  */
 export default function LandingScreen() {
-  const { state } = useAppState();
-
-  // Auto-redirect authenticated users to the main app
-  useEffect(() => {
-    if (state.isAuthenticated && state.activeTrip) {
-      router.replace('/(tabs)');
-    }
-  }, [state.isAuthenticated, state.activeTrip]);
-
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <ScrollView

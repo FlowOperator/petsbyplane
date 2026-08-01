@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -25,13 +24,9 @@ export default function ProfileSettingsScreen() {
   const [offersNews, setOffersNews] = useState(false);
 
   const handleLogout = () => {
-    Alert.alert('Log out', 'Are you sure?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Log out', style: 'destructive', onPress: () => {
-        dispatch({ type: 'LOGOUT' });
-        router.replace('/');
-      }},
-    ]);
+    // Alert.alert doesn't work on web, so just log out directly
+    dispatch({ type: 'LOGOUT' });
+    router.replace('/');
   };
 
   return (

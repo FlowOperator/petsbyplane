@@ -161,6 +161,38 @@ function HasBookingView({ pet, activeTrip, consultant, documents }: any) {
 // ─── No Booking View ─────────────────────────────────────────────────
 
 function NoBookingView() {
+  const { dispatch } = useAppState();
+
+  const handleDemoSkip = () => {
+    const now = new Date().toISOString();
+    const tripId = 'trip-demo';
+    const petId = 'pet-demo';
+    const ownerId = 'owner-demo';
+    dispatch({
+      type: 'SET_BOOKING',
+      payload: {
+        owner: { id: ownerId, firstName: 'Alex', surname: 'Demo', email: 'alex@demo.com', phone: '+44 7700 000000', preferredLanguage: 'en', mediaConsent: true, pets: [petId], createdAt: now },
+        pet: { id: petId, ownerId, name: 'Darcy', species: 'dog', breed: 'Labrador Retriever', dateOfBirth: '2022-03-12', weight: 28, microchipNumber: '981 000 012 345 678', documentStatus: 'pending', createdAt: now, updatedAt: now },
+        trip: { id: tripId, ownerId, petId, direction: 'export', status: 'active', originCity: 'London', originAirport: 'LHR', destinationCity: 'Cape Town', destinationAirport: 'CPT', travelDate: '2026-09-10', flight: { airline: 'KLM', flightNumber: 'KL592', route: 'LHR → AMS → CPT', departureTime: '2026-09-10T09:30:00Z', arrivalTime: '2026-09-10T22:45:00Z', confirmed: true }, payments: [], milestones: [
+          { id: 'ms-1', tripId, order: 1, title: 'Initial consultation & quote', description: 'Reviewed needs, route confirmed', status: 'completed', completedAt: now },
+          { id: 'ms-2', tripId, order: 2, title: 'Veterinary requirements', description: 'Vaccinations and blood tests', status: 'completed', completedAt: now },
+          { id: 'ms-3', tripId, order: 3, title: 'Route planning & flight booking', description: 'KLM via Amsterdam confirmed', status: 'completed', completedAt: now },
+          { id: 'ms-4', tripId, order: 4, title: 'IATA crate delivery', description: 'Size 4 crate delivered', status: 'completed', completedAt: now },
+          { id: 'ms-5', tripId, order: 5, title: 'Export preparation', description: 'EHC and permits in progress', status: 'current', estimatedDate: '2026-09-01' },
+          { id: 'ms-6', tripId, order: 6, title: 'Collection & check-in', description: 'Pickup and airport check-in', status: 'upcoming', plannedDate: '2026-09-10' },
+          { id: 'ms-7', tripId, order: 7, title: 'Arrival & reunion', description: 'Landing at CPT', status: 'upcoming', plannedDate: '2026-09-10' },
+        ], createdAt: now, updatedAt: now },
+        consultant: { id: 'cons-001', name: 'Sarah Whitfield', phone: '+44 1903 741 000', email: 'sarah@petsbyplane.com', isOnline: true },
+        documents: [
+          { id: 'doc-1', petId, tripId, type: 'microchip_confirmation', name: 'Microchip confirmation', description: '15-digit ISO microchip verified', status: 'verified', verifiedAt: now },
+          { id: 'doc-2', petId, tripId, type: 'rabies_vaccination', name: 'Rabies vaccination', description: 'Administered 30+ days before departure', status: 'verified', verifiedAt: now },
+          { id: 'doc-3', petId, tripId, type: 'health_screening', name: 'Blood tests', description: 'Required for South Africa', status: 'verified', verifiedAt: now },
+          { id: 'doc-4', petId, tripId, type: 'export_health_certificate', name: 'Export Health Certificate', description: 'Must be within 10 days of departure', status: 'missing' },
+        ],
+      },
+    });
+  };
+
   return (
     <>
       {/* Empty state card */}
@@ -199,6 +231,11 @@ function NoBookingView() {
 
       <TouchableOpacity onPress={() => router.push('/guides')} style={styles.seeAllGuides}>
         <Text style={styles.seeAllGuidesText}>See all travel guides →</Text>
+      </TouchableOpacity>
+
+      {/* Demo shortcut — remove in production */}
+      <TouchableOpacity style={styles.demoSkipBtn} onPress={handleDemoSkip}>
+        <Text style={styles.demoSkipText}>Demo: Skip to booked state →</Text>
       </TouchableOpacity>
     </>
   );
@@ -375,4 +412,10 @@ const styles = StyleSheet.create({
   browseCardLabel: { color: colors.textPrimary, fontFamily: 'Nunito_700Bold', fontSize: 12, lineHeight: 16 },
   seeAllGuides: { alignItems: 'center', marginTop: 12, paddingVertical: 8 },
   seeAllGuidesText: { ...typography.bodySmall, fontFamily: 'Nunito_700Bold', color: colors.primary },
+  demoSkipBtn: {
+    alignItems: 'center', marginTop: 16, marginHorizontal: layout.screenPaddingHorizontal,
+    backgroundColor: 'rgba(232, 98, 61, 0.08)', borderWidth: 1.5, borderColor: 'rgba(232, 98, 61, 0.25)',
+    borderRadius: radius.pill, paddingVertical: 12,
+  },
+  demoSkipText: { fontFamily: 'Nunito_700Bold', fontSize: 13, color: colors.primary },
 });

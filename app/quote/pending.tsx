@@ -45,6 +45,14 @@ export default function QuotePendingScreen() {
 
       {/* Bottom CTA */}
       <View style={styles.bottomArea}>
+        {/* Demo shortcut for testing — remove in production */}
+        <TouchableOpacity
+          style={styles.demoBtn}
+          onPress={() => router.push('/quote/booking')}
+        >
+          <Text style={styles.demoBtnText}>Demo: View quote now →</Text>
+        </TouchableOpacity>
+
         <Button
           title="Back to Home"
           onPress={() => router.replace('/(tabs)')}
@@ -126,5 +134,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.screenPaddingHorizontal,
     paddingVertical: 16,
     paddingBottom: 30,
+    gap: 10,
+  },
+  demoBtn: {
+    backgroundColor: 'rgba(232, 98, 61, 0.1)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(232, 98, 61, 0.3)',
+    borderRadius: radius.pill,
+    paddingVertical: 13,
+    alignItems: 'center',
+  },
+  demoBtnText: {
+    fontFamily: 'Nunito_700Bold',
+    fontSize: 14,
+    color: colors.primary,
   },
 });

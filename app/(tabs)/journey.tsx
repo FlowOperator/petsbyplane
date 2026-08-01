@@ -21,7 +21,7 @@ type JourneyTab = 'before' | 'transit';
 export default function JourneyScreen() {
   const [activeTab, setActiveTab] = useState<JourneyTab>('before');
   const { state } = useAppState();
-  const { activeTrip, pets, consultant } = state;
+  const { hasBooking, activeTrip, pets, consultant } = state;
 
   const pet = pets.find((p) => p.id === activeTrip?.petId);
   const milestones = activeTrip?.milestones || [];
@@ -29,7 +29,7 @@ export default function JourneyScreen() {
 
   const currentMilestone = milestones.find((m) => m.status === 'current');
   const isInTransit = activeTrip?.status === 'in_transit';
-  const hasTrip = !!activeTrip;
+  const hasTrip = hasBooking && !!activeTrip;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>

@@ -11,23 +11,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, spacing, radius, shadows, layout } from '../../src/theme';
 import { Card, Badge, Button } from '../../src/components/ui';
 import { useAppState } from '../../src/services/store';
-import { useRequirements } from '../../src/hooks/useRequirements';
-import { ShareTrackingButton } from '../../src/components/ShareTrackingButton';
-import { SyncCalendarButton } from '../../src/components/SyncCalendarButton';
-import { BehavetCard } from '../../src/components/BehavetCard';
-import { TrustBadge } from '../../src/components/TrustBadge';
-import { EmptyState } from '../../src/components/EmptyState';
 import { router } from 'expo-router';
 
 export default function HomeScreen() {
   const { state } = useAppState();
-  const { owner, activeTrip, consultant, pets, documents } = state;
-  const { checklist, summary } = useRequirements();
-
+  const { hasBooking, owner, activeTrip, consultant, pets, documents } = state;
   const pet = pets.find((p) => p.id === activeTrip?.petId);
-  const pendingDocs = documents.filter((d) => d.status === 'missing' || d.status === 'expiring_soon');
-  const urgentItems = checklist.filter((i) => i.isUrgent || i.isOverdue);
-  const hasTrip = !!activeTrip;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -49,520 +38,341 @@ export default function HomeScreen() {
             onPress={() => router.push('/notifications')}
           >
             <Ionicons name="notifications-outline" size={20} color={colors.textPrimary} />
+            <View style={styles.notifDot} />
           </TouchableOpacity>
         </View>
 
-        {/* Empty state when no active trip */}
-        {!hasTrip && (
-          <EmptyState
-            icon="paw"
-            title="Ready to fly your pet?"
-            description="Get a free quote and we'll guide you through everything — vaccinations, crates, paperwork, and the flight itself."
-            actionLabel="Get a quote"
-            onAction={() => router.push('/quote')}
-            secondaryLabel="Learn how it works"
-            onSecondary={() => router.push('/about')}
-          />
+        {hasBooking ? (
+          <HasBookingView pet={pet} activeTrip={activeTrip} consultant={consultant} documents={documents} />
+        ) : (
+          <NoBookingView />
         )}
+      </ScrollView>
 
-        {hasTrip && (
-          <>
+      {/* Floating chat FAB — only when has booking */}
+      {hasBooking && (
+        <TouchableOpacity
+          style={styles.fab}
+          accessibilityLabel="Chat with consultant"
+          accessibilityRole="button"
+          onPress={() => router.push('/(tabs)/messages')}
+        >
+          <Ionicons name="chatbubble" size={22} color={colors.white} />
+        </TouchableOpacity>
+      )}
+    </SafeAreaView>
+  );
+}
 
-        {/* Active Trip Card */}
-        <Card style={styles.tripCard}>
-          {/* Pet info row */}
-          <View style={styles.petRow}>
-            <View style={styles.petAvatarContainer}>
-              <View style={styles.petAvatarGlow} />
-              <View style={styles.petAvatar}>
-                <Ionicons name="paw" size={32} color={colors.primary} />
-              </View>
-            </View>
-            <View style={styles.petInfo}>
-              <View style={styles.petNameRow}>
-                <Text style={styles.petName}>{pet?.name || 'Your pet'}</Text>
-                <Badge label={pet?.species?.toUpperCase() || 'PET'} variant="pet" />
-              </View>
-              <Text style={styles.petBreed}>{pet?.breed || ''}</Text>
-            </View>
+// ─── Has Booking View ────────────────────────────────────────────────
+
+function HasBookingView({ pet, activeTrip, consultant, documents }: any) {
+  const pendingDocs = documents?.filter((d: any) => d.status === 'missing') || [];
+
+  return (
+    <>
+      {/* Trip card */}
+      <Card style={styles.tripCard}>
+        <View style={styles.petRow}>
+          <View style={styles.petAvatar}>
+            <Ionicons name="paw" size={32} color={colors.primary} />
           </View>
-
-          {/* Route indicator */}
-          <View style={styles.routeRow}>
-            <Text style={styles.routeCode}>{activeTrip?.originAirport || 'LHR'}</Text>
-            <View style={styles.routeLine}>
-              <Ionicons name="airplane" size={18} color={colors.primary} />
+          <View style={styles.petInfo}>
+            <View style={styles.petNameRow}>
+              <Text style={styles.petName}>{pet?.name || 'Your pet'}</Text>
+              <Badge label={pet?.species?.toUpperCase() || 'PET'} variant="pet" />
             </View>
-            <Text style={styles.routeCode}>{activeTrip?.destinationAirport || 'LAX'}</Text>
+            <Text style={styles.petBreed}>{pet?.breed || ''}</Text>
           </View>
-
-          {/* Status message */}
-          <View style={styles.statusRow}>
-            <View style={[styles.statusDot, { backgroundColor: colors.secondaryDark }]} />
-            <Text style={styles.statusText}>
-              {activeTrip?.status === 'deposit_pending'
-                ? `Your booking is pending — we need your deposit and a few documents before ${pet?.name || 'your pet'}'s journey can begin.`
-                : `${pet?.name || 'Your pet'}'s journey is in progress.`}
-            </Text>
-          </View>
-
-          {/* Onboarding gate checklist */}
-          <View style={styles.checklist}>
-            <View style={styles.checkItem}>
-              <View style={styles.checkItemLeft}>
-                <View style={styles.checkbox} />
-                <Text style={styles.checkItemText}>Deposit paid</Text>
-              </View>
-              <TouchableOpacity accessibilityRole="link">
-                <Text style={styles.checkItemAction}>Pay now</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.checkItem}>
-              <View style={styles.checkItemLeft}>
-                <View style={styles.checkbox} />
-                <Text style={styles.checkItemText}>Documents uploaded</Text>
-              </View>
-              <TouchableOpacity accessibilityRole="link">
-                <Text style={styles.checkItemAction}>Upload</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Card>
-
-        {/* Attention needed */}
-        <View style={styles.attentionHeader}>
-          <Text style={styles.attentionCount}>{pendingDocs.length} things need your attention</Text>
-          <TouchableOpacity accessibilityRole="link">
-            <Text style={styles.seeAll}>See all</Text>
-          </TouchableOpacity>
         </View>
 
-        {/* Action card */}
-        <Card variant="highlighted" style={styles.actionCard}>
-          <View style={styles.actionRow}>
-            <View style={styles.actionIcon}>
-              <Ionicons name="cloud-upload-outline" size={20} color={colors.primary} />
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>
-                {pendingDocs.length > 0
-                  ? `Upload ${pet?.name || 'your pet'}'s ${pendingDocs[0]?.name || 'document'}`
-                  : 'All documents uploaded'}
-              </Text>
-              <Text style={styles.actionSubtitle}>
-                {pendingDocs.length > 0
-                  ? 'Must be completed within 10 days of departure'
-                  : 'Your consultant will verify everything'}
-              </Text>
-            </View>
+        {/* Route */}
+        <View style={styles.routeRow}>
+          <Text style={styles.routeCode}>{activeTrip?.originAirport || 'LHR'}</Text>
+          <View style={styles.routeLine}>
+            <Ionicons name="airplane" size={18} color={colors.primary} />
           </View>
-        </Card>
+          <Text style={styles.routeCode}>{activeTrip?.destinationAirport || 'LAX'}</Text>
+        </View>
 
-        <Button
-          title="Upload now"
-          onPress={() => router.push('/(tabs)/documents')}
-          variant="primary"
-          style={styles.uploadButton}
-        />
+        {/* Status */}
+        <View style={styles.statusRow}>
+          <View style={styles.statusDot} />
+          <Text style={styles.statusText}>
+            Your booking is pending — we need your deposit and a few documents before {pet?.name || 'your pet'}'s journey can begin.
+          </Text>
+        </View>
 
-        {/* Deadline countdown */}
-        {urgentItems.length > 0 && (
-          <View style={styles.deadlineCard}>
-            <View style={styles.deadlineCircle}>
-              <Text style={styles.deadlineNumber}>{urgentItems[0].daysRemaining}d</Text>
-            </View>
-            <Text style={styles.deadlineText}>
-              {urgentItems[0].daysRemaining} days left until {pet?.name || "your pet"}'s{' '}
-              <Text style={{ color: colors.primary }}>{urgentItems[0].requirement.title}</Text> deadline
-            </Text>
+        {/* Checklist */}
+        <View style={styles.checklist}>
+          <ChecklistItem label="Deposit paid" action="Pay now" />
+          <ChecklistItem label="Documents uploaded" action="Upload" />
+        </View>
+      </Card>
+
+      {/* Attention needed */}
+      {pendingDocs.length > 0 && (
+        <>
+          <View style={styles.attentionHeader}>
+            <Text style={styles.attentionCount}>{pendingDocs.length} things need your attention</Text>
+            <TouchableOpacity><Text style={styles.seeAll}>See all</Text></TouchableOpacity>
           </View>
-        )}
+          <Card variant="highlighted" style={styles.actionCard}>
+            <View style={styles.actionRow}>
+              <View style={styles.actionIcon}>
+                <Ionicons name="cloud-upload-outline" size={20} color={colors.primary} />
+              </View>
+              <View style={styles.actionContent}>
+                <Text style={styles.actionTitle}>Upload {pet?.name}'s rabies vaccination record</Text>
+                <Text style={styles.actionSubtitle}>Needed before the titre test can be booked</Text>
+              </View>
+            </View>
+          </Card>
+          <Button title="Upload now" onPress={() => {}} variant="primary" style={styles.uploadBtn} />
+        </>
+      )}
 
-        {/* Consultant card */}
+      {/* Consultant */}
+      {consultant && (
         <Card style={styles.consultantCard}>
           <View style={styles.consultantRow}>
             <View style={styles.consultantAvatar}>
               <Ionicons name="person" size={24} color={colors.textSecondary} />
             </View>
             <View style={styles.consultantInfo}>
-              <Text style={styles.consultantName}>{consultant?.name || 'Your consultant'}</Text>
-              <Text style={styles.consultantRole}>{pet?.name ? `${pet.name}'s relocation consultant` : 'Relocation consultant'}</Text>
+              <Text style={styles.consultantName}>{consultant.name}</Text>
+              <Text style={styles.consultantRole}>{pet?.name}'s relocation consultant</Text>
             </View>
-            <TouchableOpacity
-              style={styles.chatButton}
-              accessibilityLabel="Message consultant"
-              accessibilityRole="button"
-            >
+            <TouchableOpacity style={styles.chatButton}>
               <Ionicons name="chatbubble-outline" size={19} color={colors.primary} />
             </TouchableOpacity>
           </View>
         </Card>
-        {/* Quick actions */}
-        <View style={styles.quickActions}>
-          <ShareTrackingButton />
-          <SyncCalendarButton />
-        </View>
+      )}
 
-        {/* BEHAVET card */}
-        <View style={styles.behavetWrap}>
-          <BehavetCard />
-        </View>
-
-        {/* Trustindex */}
-        <View style={styles.trustWrap}>
-          <TrustBadge />
-        </View>
-        </>
-        )}
-      </ScrollView>
-
-      {/* Floating chat FAB */}
-      <TouchableOpacity
-        style={styles.fab}
-        accessibilityLabel="Chat with consultant"
-        accessibilityRole="button"
-        onPress={() => router.push('/(tabs)/messages')}
-      >
-        <Ionicons name="chatbubble" size={22} color={colors.white} />
+      {/* Quiet guides link */}
+      <TouchableOpacity onPress={() => router.push('/guides')} style={styles.guidesLinkQuiet}>
+        <Text style={styles.guidesLinkQuietText}>Travel guides — crates, vaccinations, country rules & more</Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </>
   );
 }
 
+// ─── No Booking View ─────────────────────────────────────────────────
+
+function NoBookingView() {
+  return (
+    <>
+      {/* Empty state card */}
+      <Card style={styles.emptyCard}>
+        <View style={styles.emptyIcon}>
+          <Ionicons name="paper-plane-outline" size={32} color={colors.primary} />
+        </View>
+        <Text style={styles.emptyTitle}>No trip booked yet</Text>
+        <Text style={styles.emptyBody}>
+          When you're ready, get a free quote and we'll take care of the rest.
+        </Text>
+        <Button
+          title="Get a quote"
+          onPress={() => router.push('/quote')}
+          variant="primary"
+          style={styles.emptyButton}
+        />
+      </Card>
+
+      {/* Browse section */}
+      <Text style={styles.browseTitle}>Not ready to book? Have a browse</Text>
+      <Text style={styles.browseSubtitle}>
+        Get a feel for how it all works — crates, vaccines, destinations, the airlines we fly with.
+      </Text>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.browseRow}
+      >
+        <BrowseCard icon="globe-outline" label="Country rules" route="/guides/country-rules" iconColor={colors.primary} iconBg={colors.primaryLight} />
+        <BrowseCard icon="cube-outline" label="Travel crates" route="/guides/crates" />
+        <BrowseCard icon="medkit-outline" label="Vaccines & tests" route="/guides/vaccinations" />
+        <BrowseCard icon="airplane-outline" label="Airlines & partners" route="/guides/airlines" />
+      </ScrollView>
+
+      <TouchableOpacity onPress={() => router.push('/guides')} style={styles.seeAllGuides}>
+        <Text style={styles.seeAllGuidesText}>See all travel guides →</Text>
+      </TouchableOpacity>
+    </>
+  );
+}
+
+// ─── Sub-components ──────────────────────────────────────────────────
+
+function ChecklistItem({ label, action }: { label: string; action: string }) {
+  return (
+    <View style={styles.checkItem}>
+      <View style={styles.checkItemLeft}>
+        <View style={styles.checkbox} />
+        <Text style={styles.checkItemText}>{label}</Text>
+      </View>
+      <TouchableOpacity>
+        <Text style={styles.checkItemAction}>{action}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function BrowseCard({ icon, label, route, iconColor, iconBg }: {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  route: string;
+  iconColor?: string;
+  iconBg?: string;
+}) {
+  return (
+    <TouchableOpacity style={styles.browseCard} onPress={() => router.push(route as any)}>
+      <View style={[styles.browseCardIcon, iconBg ? { backgroundColor: iconBg } : {}]}>
+        <Ionicons name={icon} size={16} color={iconColor || colors.textPrimary} />
+      </View>
+      <Text style={styles.browseCardLabel}>{label}</Text>
+    </TouchableOpacity>
+  );
+}
+
+// ─── Styles ──────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  container: {
-    flex: 1,
-  },
-  content: {
-    paddingBottom: 120,
-  },
+  safeArea: { flex: 1, backgroundColor: colors.background },
+  container: { flex: 1 },
+  content: { paddingBottom: 120 },
+
+  // Header
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     paddingHorizontal: layout.screenPaddingHorizontal,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.md,
+    paddingTop: spacing.xxxl, paddingBottom: spacing.md,
   },
-  greeting: {
-    ...typography.label,
-    color: colors.textSecondary,
-  },
-  userName: {
-    ...typography.h1,
-    color: colors.textPrimary,
-  },
+  greeting: { ...typography.label, color: colors.textSecondary },
+  userName: { ...typography.h1, color: colors.textPrimary },
   notificationButton: {
-    width: layout.iconButtonSize,
-    height: layout.iconButtonSize,
-    borderRadius: layout.iconButtonSize / 2,
-    backgroundColor: colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    ...shadows.iconButton,
+    width: layout.iconButtonSize, height: layout.iconButtonSize,
+    borderRadius: layout.iconButtonSize / 2, backgroundColor: colors.white,
+    alignItems: 'center', justifyContent: 'center', ...shadows.iconButton,
+  },
+  notifDot: {
+    position: 'absolute', top: 9, right: 10,
+    width: 9, height: 9, borderRadius: 4.5,
+    backgroundColor: colors.primary, borderWidth: 2, borderColor: colors.white,
   },
 
   // Trip card
-  tripCard: {
-    marginHorizontal: layout.screenPaddingHorizontal,
-    marginTop: spacing.md,
-    borderRadius: radius.xxxl,
-    padding: 20,
-  },
-  petRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
-  },
-  petAvatarContainer: {
-    position: 'relative',
-    width: 76,
-    height: 76,
-  },
-  petAvatarGlow: {
-    position: 'absolute',
-    top: -6,
-    left: -6,
-    right: -6,
-    bottom: -6,
-    borderRadius: 44,
-    backgroundColor: 'rgba(232, 98, 61, 0.12)',
-  },
+  tripCard: { marginHorizontal: layout.screenPaddingHorizontal, marginTop: spacing.md, padding: 20 },
+  petRow: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   petAvatar: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
-    borderWidth: 4,
-    borderColor: colors.textPrimary,
-    backgroundColor: '#FBE9E2',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 76, height: 76, borderRadius: 38, borderWidth: 4, borderColor: colors.textPrimary,
+    backgroundColor: '#FBE9E2', alignItems: 'center', justifyContent: 'center',
   },
-  petInfo: {
-    flex: 1,
-  },
-  petNameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  petName: {
-    ...typography.h4,
-    color: colors.textPrimary,
-  },
-  petBreed: {
-    ...typography.bodySmall,
-    color: colors.textSecondary,
-    marginTop: 2,
-  },
-
-  // Route
+  petInfo: { flex: 1 },
+  petNameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  petName: { fontFamily: 'Baloo2_700Bold', fontSize: 19, color: colors.textPrimary },
+  petBreed: { ...typography.bodySmall, color: colors.textSecondary, marginTop: 2 },
   routeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    marginTop: 18,
-    marginBottom: 6,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    gap: 10, marginTop: 18, marginBottom: 6,
   },
-  routeCode: {
-    ...typography.h5,
-    color: colors.textPrimary,
-  },
+  routeCode: { fontFamily: 'Nunito_700Bold', fontSize: 15, color: colors.textPrimary },
   routeLine: {
-    flex: 1,
-    height: 2,
-    backgroundColor: 'rgba(232, 98, 61, 0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1, height: 2, backgroundColor: 'rgba(232, 98, 61, 0.2)',
+    alignItems: 'center', justifyContent: 'center',
   },
-
-  // Status
-  statusRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: 14,
-  },
-  statusDot: {
-    width: 9,
-    height: 9,
-    borderRadius: 4.5,
-  },
-  statusText: {
-    ...typography.bodySmall,
-    color: colors.textPrimary,
-    fontFamily: 'Nunito_600SemiBold',
-    flex: 1,
-    lineHeight: 18,
-  },
-
-  // Checklist
-  checklist: {
-    marginTop: 14,
-    gap: 8,
-  },
+  statusRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 14 },
+  statusDot: { width: 9, height: 9, borderRadius: 4.5, backgroundColor: '#C98A2E' },
+  statusText: { ...typography.bodySmall, fontFamily: 'Nunito_600SemiBold', color: colors.textPrimary, flex: 1, lineHeight: 18 },
+  checklist: { marginTop: 14, gap: 8 },
   checkItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: colors.secondarySubtle,
-    borderRadius: radius.md,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    backgroundColor: colors.secondarySubtle, borderRadius: radius.md, paddingVertical: 10, paddingHorizontal: 12,
   },
-  checkItemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  checkbox: {
-    width: 18,
-    height: 18,
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: colors.secondaryDark,
-  },
-  checkItemText: {
-    ...typography.bodySmall,
-    fontFamily: 'Nunito_600SemiBold',
-    color: colors.textPrimary,
-  },
-  checkItemAction: {
-    ...typography.caption,
-    fontFamily: 'Nunito_700Bold',
-    color: colors.secondaryDark,
-  },
+  checkItemLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  checkbox: { width: 18, height: 18, borderRadius: 5, borderWidth: 2, borderColor: colors.secondaryDark },
+  checkItemText: { ...typography.bodySmall, fontFamily: 'Nunito_600SemiBold', color: colors.textPrimary },
+  checkItemAction: { ...typography.caption, fontFamily: 'Nunito_700Bold', color: colors.secondaryDark },
 
   // Attention
   attentionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginHorizontal: layout.screenPaddingHorizontal,
-    marginTop: 18,
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    marginHorizontal: layout.screenPaddingHorizontal, marginTop: 18,
   },
-  attentionCount: {
-    ...typography.caption,
-    fontFamily: 'Nunito_700Bold',
-    color: colors.primary,
-  },
-  seeAll: {
-    ...typography.caption,
-    fontFamily: 'Nunito_700Bold',
-    color: colors.textSecondary,
-  },
-
-  // Action card
-  actionCard: {
-    marginHorizontal: layout.screenPaddingHorizontal,
-    marginTop: 8,
-    padding: 18,
-  },
-  actionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
-  },
+  attentionCount: { ...typography.caption, fontFamily: 'Nunito_700Bold', color: colors.primary },
+  seeAll: { ...typography.caption, fontFamily: 'Nunito_700Bold', color: colors.textSecondary },
+  actionCard: { marginHorizontal: layout.screenPaddingHorizontal, marginTop: 8, padding: 18 },
+  actionRow: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   actionIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: colors.primaryLight,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 44, height: 44, borderRadius: 22, backgroundColor: colors.primaryLight,
+    alignItems: 'center', justifyContent: 'center',
   },
-  actionContent: {
-    flex: 1,
-  },
-  actionTitle: {
-    ...typography.body,
-    fontFamily: 'Nunito_700Bold',
-    color: colors.textPrimary,
-    lineHeight: 18,
-  },
-  actionSubtitle: {
-    ...typography.caption,
-    color: colors.textSecondary,
-    marginTop: 2,
-  },
-  uploadButton: {
-    marginHorizontal: layout.screenPaddingHorizontal,
-    marginTop: 12,
-  },
-
-  // Deadline
-  deadlineCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    marginHorizontal: layout.screenPaddingHorizontal,
-    marginTop: 14,
-    backgroundColor: colors.primarySubtle,
-    borderWidth: 1.5,
-    borderColor: 'rgba(232, 98, 61, 0.35)',
-    borderRadius: radius.lg + 2,
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-  },
-  deadlineCircle: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
-    borderWidth: 2.5,
-    borderColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    transform: [{ rotate: '-8deg' }],
-  },
-  deadlineNumber: {
-    ...typography.h5,
-    fontFamily: 'Baloo2_800ExtraBold',
-    color: colors.primary,
-  },
-  deadlineText: {
-    ...typography.bodySmall,
-    fontFamily: 'Nunito_600SemiBold',
-    color: colors.textPrimary,
-    flex: 1,
-    lineHeight: 18,
-  },
+  actionContent: { flex: 1 },
+  actionTitle: { ...typography.body, fontFamily: 'Nunito_700Bold', color: colors.textPrimary, lineHeight: 18 },
+  actionSubtitle: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
+  uploadBtn: { marginHorizontal: layout.screenPaddingHorizontal, marginTop: 12 },
 
   // Consultant
-  consultantCard: {
-    marginHorizontal: layout.screenPaddingHorizontal,
-    marginTop: 14,
-    padding: 14,
-  },
-  consultantRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
+  consultantCard: { marginHorizontal: layout.screenPaddingHorizontal, marginTop: 14, padding: 14 },
+  consultantRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   consultantAvatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.background,
-    borderWidth: 2,
-    borderColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 52, height: 52, borderRadius: 26, backgroundColor: colors.background,
+    borderWidth: 2, borderColor: colors.background, alignItems: 'center', justifyContent: 'center',
   },
-  consultantInfo: {
-    flex: 1,
-  },
-  consultantName: {
-    ...typography.body,
-    fontFamily: 'Nunito_700Bold',
-    color: colors.textPrimary,
-  },
-  consultantRole: {
-    ...typography.caption,
-    color: colors.textSecondary,
-  },
+  consultantInfo: { flex: 1 },
+  consultantName: { ...typography.body, fontFamily: 'Nunito_700Bold', color: colors.textPrimary },
+  consultantRole: { ...typography.caption, color: colors.textSecondary },
   chatButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primaryLight,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 40, height: 40, borderRadius: 20, backgroundColor: colors.primaryLight,
+    alignItems: 'center', justifyContent: 'center',
   },
 
-  // Quick actions
-  quickActions: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-    marginHorizontal: layout.screenPaddingHorizontal,
-    marginTop: 16,
-  },
-  behavetWrap: {
-    marginHorizontal: layout.screenPaddingHorizontal,
-    marginTop: 14,
-  },
-  trustWrap: {
-    alignItems: 'center',
-    marginTop: 16,
-    marginBottom: 20,
-  },
+  // Quiet guides link
+  guidesLinkQuiet: { alignItems: 'center', marginTop: 16, marginBottom: 20 },
+  guidesLinkQuietText: { ...typography.caption, fontFamily: 'Nunito_700Bold', color: colors.textMuted },
 
   // FAB
   fab: {
-    position: 'absolute',
-    right: 20,
-    bottom: 100,
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: 'absolute', right: 20, bottom: 100,
+    width: 52, height: 52, borderRadius: 26,
+    backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center',
     ...shadows.fab,
   },
+
+  // ─── No Booking State ───
+  emptyCard: {
+    marginHorizontal: layout.screenPaddingHorizontal, marginTop: 32,
+    padding: 36, alignItems: 'center',
+  },
+  emptyIcon: {
+    width: 72, height: 72, borderRadius: 36, backgroundColor: 'rgba(232, 98, 61, 0.1)',
+    alignItems: 'center', justifyContent: 'center', marginBottom: 16,
+  },
+  emptyTitle: { fontFamily: 'Baloo2_700Bold', fontSize: 16.5, color: colors.textPrimary },
+  emptyBody: { ...typography.bodySmall, color: colors.textSecondary, textAlign: 'center', marginTop: 8, lineHeight: 20 },
+  emptyButton: { marginTop: 20 },
+
+  // Browse
+  browseTitle: {
+    fontFamily: 'Baloo2_700Bold', fontSize: 15, color: colors.textPrimary,
+    marginHorizontal: layout.screenPaddingHorizontal, marginTop: 24,
+  },
+  browseSubtitle: {
+    ...typography.caption, color: colors.textSecondary, lineHeight: 18,
+    marginHorizontal: layout.screenPaddingHorizontal, marginTop: 4, marginBottom: 12,
+  },
+  browseRow: { paddingHorizontal: layout.screenPaddingHorizontal, gap: 10 },
+  browseCard: {
+    width: 112, backgroundColor: colors.white, borderRadius: radius.xl,
+    padding: 14, paddingHorizontal: 12, ...shadows.cardLight,
+  },
+  browseCardIcon: {
+    width: 34, height: 34, borderRadius: 17, backgroundColor: 'rgba(46, 40, 34, 0.06)',
+    alignItems: 'center', justifyContent: 'center', marginBottom: 8,
+  },
+  browseCardLabel: { color: colors.textPrimary, fontFamily: 'Nunito_700Bold', fontSize: 12, lineHeight: 16 },
+  seeAllGuides: { alignItems: 'center', marginTop: 12, paddingVertical: 8 },
+  seeAllGuidesText: { ...typography.bodySmall, fontFamily: 'Nunito_700Bold', color: colors.primary },
 });

@@ -16,15 +16,39 @@ import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { useChat } from '../../src/hooks/useChat';
 import { useAppState } from '../../src/services/store';
 import { QUICK_REPLIES, ChatMessage } from '../../src/services/whatsappService';
+import { router } from 'expo-router';
 
 export default function MessagesScreen() {
   const [messageText, setMessageText] = useState('');
   const flatListRef = useRef<FlatList>(null);
   const { state } = useAppState();
-  const { consultant, pets, activeTrip } = state;
+  const { hasBooking, consultant, pets, activeTrip } = state;
   const pet = pets.find((p) => p.id === activeTrip?.petId);
 
   const { messages, isSending, handleSend, consultantName, consultantOnline } = useChat();
+
+  // Pre-booking empty state
+  if (!hasBooking) {
+    return (
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <View style={styles.emptyContainer}>
+          <View style={styles.emptyIconCircle}>
+            <Ionicons name="chatbubble-outline" size={32} color={colors.primary} />
+          </View>
+          <Text style={styles.emptyTitle}>No consultant assigned yet</Text>
+          <Text style={styles.emptyBody}>
+            Once you've booked, you'll get a dedicated consultant who you can message directly — any time, about anything.
+          </Text>
+          <TouchableOpacity
+            style={styles.emptyBtn}
+            onPress={() => router.push('/guides/contact')}
+          >
+            <Text style={styles.emptyBtnText}>Get in touch</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   const onSend = () => {
     if (!messageText.trim()) return;
@@ -247,4 +271,25 @@ const styles = StyleSheet.create({
     ...shadows.primaryButton,
   },
   sendButtonDisabled: { opacity: 0.5 },
+
+  // Empty state (no booking)
+  emptyContainer: {
+    flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32,
+  },
+  emptyIconCircle: {
+    width: 72, height: 72, borderRadius: 36, backgroundColor: colors.primaryLight,
+    alignItems: 'center', justifyContent: 'center', marginBottom: 16,
+  },
+  emptyTitle: {
+    fontFamily: 'Baloo2_700Bold', fontSize: 16.5, color: colors.textPrimary, textAlign: 'center',
+  },
+  emptyBody: {
+    ...typography.bodySmall, color: colors.textSecondary, textAlign: 'center',
+    marginTop: 8, lineHeight: 20, maxWidth: 280,
+  },
+  emptyBtn: {
+    marginTop: 20, backgroundColor: colors.secondary, borderRadius: radius.pill,
+    paddingVertical: 13, paddingHorizontal: 28, ...shadows.button,
+  },
+  emptyBtnText: { ...typography.button, color: colors.textPrimary },
 });

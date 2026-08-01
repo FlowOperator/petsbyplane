@@ -82,12 +82,30 @@ function getIconColor(status: DocumentStatus) {
 
 export default function DocumentsScreen() {
   const { state } = useAppState();
-  const { documents, activeTrip, pets } = state;
+  const { hasBooking, documents, activeTrip, pets } = state;
   const [uploadVisible, setUploadVisible] = useState(false);
   const [uploadDocType, setUploadDocType] = useState<{ type: any; name: string }>({
     type: 'other',
     name: 'Document',
   });
+
+  // Pre-booking empty state
+  if (!hasBooking) {
+    return (
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <View style={{ flex: 1, paddingHorizontal: layout.screenPaddingHorizontal, paddingTop: layout.screenPaddingTop }}>
+          <Text style={styles.title}>Documents</Text>
+          <EmptyState
+            icon="document-text-outline"
+            title="No documents needed yet"
+            description="Once you've booked, we'll tell you exactly which documents are needed and when — no guesswork."
+            actionLabel="Get a quote"
+            onAction={() => router.push('/quote')}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   const pet = pets.find((p) => p.id === activeTrip?.petId);
   const tripDocs = documents.filter((d) => d.tripId === activeTrip?.id);

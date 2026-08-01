@@ -97,10 +97,15 @@ function HasBookingView({ pet, activeTrip, consultant, documents }: any) {
 
         {/* Status */}
         <View style={styles.statusRow}>
-          <View style={[styles.statusDot, activeTrip?.status === 'active' && { backgroundColor: colors.success }]} />
+          <View style={[styles.statusDot,
+            activeTrip?.status === 'active' && { backgroundColor: colors.success },
+            activeTrip?.status === 'documents_pending' && { backgroundColor: colors.secondaryDark },
+          ]} />
           <Text style={styles.statusText}>
             {activeTrip?.status === 'deposit_pending'
               ? `Your booking is pending — we need your deposit and a few documents before ${pet?.name || 'your pet'}'s journey can begin.`
+              : activeTrip?.status === 'documents_pending'
+              ? `Deposit paid — thank you! We're getting started on ${pet?.name || 'your pet'}'s journey. Upload your documents when you're ready.`
               : activeTrip?.status === 'active'
               ? `${pet?.name || 'Your pet'}'s journey is in progress. Your consultant is managing everything.`
               : `${pet?.name || 'Your pet'}'s journey is being prepared.`}

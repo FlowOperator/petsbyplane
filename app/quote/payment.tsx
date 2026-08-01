@@ -73,7 +73,7 @@ export default function PaymentScreen() {
           ownerId,
           petId,
           direction: search?.direction || 'export',
-          status: 'active',
+          status: 'documents_pending',
           originCity: search?.originCity || 'London',
           originAirport: search?.originAirport || 'LHR',
           destinationCity: search?.destinationCity || 'Cape Town',

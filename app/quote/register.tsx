@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { Card } from '../../src/components/ui';
 import { AcceptanceCard } from '../../src/components/AcceptanceCard';
+import { ProgressSteps } from '../../src/components/ProgressSteps';
 import { useQuoteFlow } from '../../src/services/quoteContext';
 import { useAppState } from '../../src/services/store';
 import { createBookingFromQuote } from '../../src/services/quoteService';
@@ -53,12 +54,7 @@ export default function RegisterScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       {/* Progress — all filled */}
-      <View style={styles.progressRow}>
-        <View style={[styles.progressDot, styles.progressActive]} />
-        <View style={[styles.progressDot, styles.progressActive]} />
-        <View style={[styles.progressDot, styles.progressActive]} />
-        <View style={[styles.progressDot, styles.progressActive]} />
-      </View>
+      <ProgressSteps total={4} current={4} />
 
       <ScrollView
         style={styles.scrollView}
@@ -215,13 +211,6 @@ export default function RegisterScreen() {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.background },
-  progressRow: {
-    flexDirection: 'row', gap: 6,
-    paddingHorizontal: layout.screenPaddingHorizontal,
-    paddingTop: 16, marginBottom: 16,
-  },
-  progressDot: { flex: 1, height: 4, borderRadius: 2, backgroundColor: '#E4DFD4' },
-  progressActive: { backgroundColor: colors.primary },
   scrollView: { flex: 1 },
   scrollContent: {
     paddingHorizontal: layout.screenPaddingHorizontal,

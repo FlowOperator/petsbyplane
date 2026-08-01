@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#EAE6DC;}
+  a{color:#E8623D;}
+  a:hover{color:#c94f2f;}
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+
+<div style="width:390px;height:844px;background:#F1EEE7;position:relative;overflow:hidden;font-family:'Nunito',sans-serif;margin:0 auto;box-shadow:0 30px 80px rgba(46,40,34,0.18);display:flex;flex-direction:column;">
+
+  <div style="text-align:right;padding:8px 20px 0;flex-shrink:0;">
+    <a href="#" onClick="{{ toggleTrip }}" style="color:#B4ACA1;font-size:10.5px;font-weight:700;text-decoration:none;">Preview: {{ toggleLabel }}</a>
+  </div>
+
+  <sc-if value="{{ hasNoTrip }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;">
+    <div style="width:72px;height:72px;border-radius:50%;background:rgba(232,98,61,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 3.3 6.47L4 20l1.3-3.6A8 8 0 0 1 4 12z" stroke="#E8623D" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    </div>
+    <div style="color:#2E2822;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16.5px;">No consultant assigned yet</div>
+    <div style="color:#6B6259;font-size:13px;margin-top:8px;line-height:1.5;max-width:270px;">Once you book, you'll be paired with a dedicated consultant here. Got a question in the meantime?</div>
+    <a href="Get In Touch Screen.dc.html" style="display:inline-block;margin-top:20px;background:#EFC26C;color:#2E2822;border:none;border-radius:999px;padding:13px 28px;font-weight:700;font-size:14px;text-decoration:none;">Get in touch</a>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ hasTrip }}" hint-placeholder-val="{{ true }}">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;gap:12px;padding:24px 20px 14px;background:#F1EEE7;flex-shrink:0;box-shadow:0 1px 0 rgba(46,40,34,0.06);">
+    <div style="width:36px;height:36px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(46,40,34,0.08);flex-shrink:0;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5 8 12l7 7" stroke="#2E2822" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div style="width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid #FFFFFF;box-shadow:0 2px 8px rgba(46,40,34,0.08);">
+      <image-slot id="consultant-photo-msg" shape="circle" placeholder="Consultant photo"></image-slot>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div style="color:#2E2822;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15.5px;">Sarah Whitfield</div>
+      <div style="display:flex;align-items:center;gap:5px;margin-top:1px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#4C8B6B;flex-shrink:0;"></span>
+        <span style="color:#6B6259;font-size:11.5px;font-weight:600;">Darcy's relocation consultant · Online</span>
+      </div>
+    </div>
+    <div style="width:38px;height:38px;border-radius:50%;background:rgba(232,98,61,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.5 3 4 5.4 6.9 6.8l2.3-2.3c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.9.6.6 0 1.1.5 1.1 1.1v3.6c0 .6-.5 1.1-1.1 1.1C10.5 21.4 2.6 13.5 2.6 3.1c0-.6.5-1.1 1.1-1.1H7.3c.6 0 1.1.5 1.1 1.1 0 1.4.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8z" stroke="#E8623D" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+
+  <!-- Chat area -->
+  <div style="flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px;">
+
+    <div style="display:flex;gap:10px;align-items:flex-end;">
+      <div style="width:30px;height:30px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+        <image-slot id="consultant-photo-bubble" shape="circle" placeholder="Photo"></image-slot>
+      </div>
+      <div style="max-width:76%;">
+        <div style="background:#FFFFFF;border-radius:20px 20px 20px 6px;padding:13px 16px;box-shadow:0 6px 16px rgba(46,40,34,0.06);">
+          <div style="color:#2E2822;font-size:14px;line-height:1.5;">Hi there! I'm Sarah, your dedicated consultant for Darcy's journey 🐾 I'll be looking after every step of the trip from London to Los Angeles.</div>
+        </div>
+        <div style="color:#9A9188;font-size:11px;margin-top:4px;margin-left:4px;">9:02 AM</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;align-items:flex-end;">
+      <div style="width:30px;height:30px;flex-shrink:0;"></div>
+      <div style="max-width:76%;">
+        <div style="background:#FFFFFF;border-radius:20px 20px 20px 6px;padding:13px 16px;box-shadow:0 6px 16px rgba(46,40,34,0.06);">
+          <div style="color:#2E2822;font-size:14px;line-height:1.5;">There's nothing urgent from you right now — I'm just keeping an eye on the paperwork. Feel free to ask me anything, any time.</div>
+        </div>
+        <div style="color:#9A9188;font-size:11px;margin-top:4px;margin-left:4px;">9:03 AM</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Quick replies -->
+  <div style="display:flex;gap:8px;padding:0 20px 12px;overflow-x:auto;flex-shrink:0;">
+    <div style="background:#FFFFFF;border:1.5px solid rgba(46,40,34,0.1);color:#2E2822;font-size:12.5px;font-weight:600;padding:9px 14px;border-radius:999px;white-space:nowrap;flex-shrink:0;">Where's Darcy now?</div>
+    <div style="background:#FFFFFF;border:1.5px solid rgba(46,40,34,0.1);color:#2E2822;font-size:12.5px;font-weight:600;padding:9px 14px;border-radius:999px;white-space:nowrap;flex-shrink:0;">What documents do I still need?</div>
+    <div style="background:#FFFFFF;border:1.5px solid rgba(46,40,34,0.1);color:#2E2822;font-size:12.5px;font-weight:600;padding:9px 14px;border-radius:999px;white-space:nowrap;flex-shrink:0;">What crate size do I need?</div>
+  </div>
+
+  <!-- Input bar -->
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 20px 22px;background:#F1EEE7;flex-shrink:0;">
+    <div style="flex:1;background:#FFFFFF;border-radius:999px;padding:12px 18px;box-shadow:0 4px 12px rgba(46,40,34,0.06);">
+      <span style="color:#9A9188;font-size:14px;">Message Sarah…</span>
+    </div>
+    <button style="width:46px;height:46px;border-radius:50%;background:#E8623D;border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;box-shadow:0 6px 16px rgba(232,98,61,0.4);">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 12h15M13 5l7 7-7 7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  state = { hasTrip: true };
+  renderVals() {
+    const { hasTrip } = this.state;
+    return {
+      hasTrip, hasNoTrip: !hasTrip,
+      toggleLabel: hasTrip ? 'no booking yet' : 'active booking',
+      toggleTrip: (e) => { e.preventDefault(); this.setState({ hasTrip: !hasTrip }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

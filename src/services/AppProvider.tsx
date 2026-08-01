@@ -1,12 +1,5 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer } from 'react';
 import { AppContext, appReducer, initialState } from './store';
-import {
-  mockOwner,
-  mockPet,
-  mockTrip,
-  mockConsultant,
-  mockDocuments,
-} from './mockData';
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -14,21 +7,12 @@ interface AppProviderProps {
 
 /**
  * Wraps the app with global state.
- * Seeds mock data in development — will be replaced by API calls.
+ * V1: starts empty — no mock data seeded.
+ * The app begins in the no-booking state.
+ * Data is populated through the real user flow (quote → checkout → booking).
  */
 export function AppProvider({ children }: AppProviderProps) {
   const [state, dispatch] = useReducer(appReducer, initialState);
-
-  // Seed mock data on mount (simulates loading from backend)
-  useEffect(() => {
-    dispatch({ type: 'SET_AUTHENTICATED', payload: true });
-    dispatch({ type: 'SET_OWNER', payload: mockOwner });
-    dispatch({ type: 'ADD_PET', payload: mockPet });
-    dispatch({ type: 'SET_TRIPS', payload: [mockTrip] });
-    dispatch({ type: 'SET_ACTIVE_TRIP', payload: mockTrip });
-    dispatch({ type: 'SET_CONSULTANT', payload: mockConsultant });
-    dispatch({ type: 'SET_DOCUMENTS', payload: mockDocuments });
-  }, []);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

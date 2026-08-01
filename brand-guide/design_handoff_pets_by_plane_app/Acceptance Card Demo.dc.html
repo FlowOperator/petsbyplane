@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F1EEE7;}</style>
+</helmet>
+
+<div style="width:390px;padding:24px 20px;background:#F1EEE7;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;margin:0 auto;font-family:'Nunito',sans-serif;">
+
+  <div style="color:#2E2822;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:18px;margin-bottom:4px;">Acceptance card — 3 contexts</div>
+
+  <dc-import name="Acceptance Card"
+    title="Terms &amp; Conditions"
+    summary="You're agreeing to our standard booking terms, including the deposit schedule and cancellation policy."
+    link-label="View full terms"
+    full-text="1. A non-refundable deposit of 25% secures your booking date. 2. Full balance is due 14 days before collection. 3. Cancellations within 7 days of collection forfeit the full booking fee. 4. Pets by Plane is not liable for delays caused by airlines, customs, or weather."
+    hint-size="100%,160px"></dc-import>
+
+  <dc-import name="Acceptance Card"
+    title="Media consent"
+    summary="You're happy for us to photograph or film Darcy during collection and check-in, for updates and our marketing."
+    link-label="View full consent"
+    full-text="1. Photos and short clips may be taken during collection, crate training, and airport check-in. 2. These may be shared with you privately or used in Pets by Plane marketing, with no identifying owner details. 3. You can withdraw consent at any time by contacting your consultant."
+    hint-size="100%,160px"></dc-import>
+
+  <dc-import name="Acceptance Card"
+    title="Owner-supplied crate waiver"
+    summary="You're confirming your own crate meets IATA size and build requirements, and accept the risk if it's rejected at check-in."
+    link-label="View full waiver"
+    full-text="1. Owner-supplied crates are inspected against IATA Live Animals Regulations before travel. 2. If a crate is rejected, a replacement will be charged at standard rates. 3. Pets by Plane is not liable for delays caused by a non-compliant owner-supplied crate."
+    hint-size="100%,160px"></dc-import>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:700}}"></script>
+</body>
+</html>

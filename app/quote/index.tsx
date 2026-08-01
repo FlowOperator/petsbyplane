@@ -71,7 +71,7 @@ export default function QuoteSearchScreen() {
         breed: breed || 'Labrador Retriever',
       },
     });
-    router.push('/quote/results');
+    router.push('/quote/flight-results');
   };
 
   const handlePopularRoute = (from: string, fromCity: string, to: string, toCity: string) => {

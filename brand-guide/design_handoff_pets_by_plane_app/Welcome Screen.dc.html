@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#EAE6DC;}
+  a{color:#E8623D;}
+  a:hover{color:#c94f2f;}
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+
+<div style="width:390px;height:844px;background:#2E2822;position:relative;overflow:hidden;font-family:'Nunito',sans-serif;margin:0 auto;box-shadow:0 30px 80px rgba(46,40,34,0.18);">
+
+  <!-- Full-bleed hero photo -->
+  <div style="position:absolute;inset:0;">
+    <image-slot id="{{ heroSlotId }}" shape="rect" placeholder="{{ heroPlaceholder }}"></image-slot>
+  </div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(46,40,34,0.05) 0%, rgba(46,40,34,0.15) 45%, rgba(46,40,34,0.92) 82%, #2E2822 100%);"></div>
+
+  <a href="#" onClick="{{ skipToBooking }}" style="position:absolute;top:26px;right:22px;color:#F1EEE7;font-size:13px;font-weight:700;text-decoration:none;">Skip</a>
+
+  <!-- Slide copy -->
+  <div style="position:absolute;left:24px;right:24px;bottom:236px;">
+    <div style="color:#FFFFFF;font-family:'Baloo 2',sans-serif;font-size:26px;font-weight:700;line-height:1.15;">{{ slideTitle }}</div>
+    <div style="color:rgba(241,238,231,0.85);font-size:14px;margin-top:10px;line-height:1.5;">{{ slideBody }}</div>
+  </div>
+
+  <div style="position:absolute;left:24px;bottom:212px;display:flex;gap:7px;">
+    <span onClick="{{ goSlide0 }}" style="{{ dot0 }}"></span>
+    <span onClick="{{ goSlide1 }}" style="{{ dot1 }}"></span>
+    <span onClick="{{ goSlide2 }}" style="{{ dot2 }}"></span>
+  </div>
+
+  <!-- Bottom action area -->
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:20px 24px 34px;display:flex;flex-direction:column;gap:12px;">
+    <button onClick="{{ getQuote }}" style="width:100%;background:#EFC26C;color:#2E2822;border:none;border-radius:999px;padding:15px 0;font-family:'Nunito',sans-serif;font-weight:700;font-size:15px;cursor:pointer;">Get a free quote</button>
+    <a href="Sign In Screen.dc.html" style="width:100%;box-sizing:border-box;text-align:center;background:rgba(241,238,231,0.1);border:1.5px solid rgba(241,238,231,0.4);color:#F1EEE7;border-radius:999px;padding:13px 0;font-weight:700;font-size:15px;text-decoration:none;">Sign in</a>
+    <div style="text-align:center;color:rgba(241,238,231,0.7);font-size:12.5px;">New here? <a href="Sign Up Screen.dc.html" style="color:#EFC26C;font-weight:700;">Create an account</a></div>
+    <div style="text-align:center;color:rgba(241,238,231,0.55);font-size:11px;line-height:1.5;margin-top:2px;">By continuing, you agree to our <a href="#" style="color:rgba(241,238,231,0.8);">Terms</a> and <a href="#" style="color:rgba(241,238,231,0.8);">Privacy Policy</a></div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  state = { slide: 0 };
+  slides = [
+    { title: 'Family-run, since day one', body: "We've relocated thousands of pets worldwide, treating every animal like our own.", slot: 'hero-family', placeholder: 'Photo: owner and pet at home' },
+    { title: 'We handle every detail', body: 'Flights, paperwork, crates and customs — all coordinated by your dedicated consultant.', slot: 'hero-consultant', placeholder: 'Photo: consultant with crate' },
+    { title: 'Track the whole journey', body: "See exactly where your pet is and what's next, right up to the moment you're reunited.", slot: 'hero-airport', placeholder: 'Photo: reunion at airport' }
+  ];
+  dotStyle(active) {
+    return { width: active ? 20 : 7, height: 7, borderRadius: 999, background: active ? '#EFC26C' : 'rgba(241,238,231,0.35)', cursor: 'pointer' };
+  }
+  renderVals() {
+    const { slide } = this.state;
+    const s = this.slides[slide];
+    return {
+      heroSlotId: s.slot, heroPlaceholder: s.placeholder,
+      slideTitle: s.title, slideBody: s.body,
+      dot0: this.dotStyle(slide === 0), dot1: this.dotStyle(slide === 1), dot2: this.dotStyle(slide === 2),
+      goSlide0: () => this.setState({ slide: 0 }), goSlide1: () => this.setState({ slide: 1 }), goSlide2: () => this.setState({ slide: 2 }),
+      getQuote: () => { window.location.href = 'New Booking Screen.dc.html'; },
+      skipToBooking: (e) => { e.preventDefault(); window.location.href = 'New Booking Screen.dc.html'; }
+    };
+  }
+  componentDidMount() {
+    this._t = setInterval(() => this.setState(s => ({ slide: (s.slide + 1) % 3 })), 4000);
+  }
+  componentWillUnmount() { clearInterval(this._t); }
+}
+</script>
+</body>
+</html>

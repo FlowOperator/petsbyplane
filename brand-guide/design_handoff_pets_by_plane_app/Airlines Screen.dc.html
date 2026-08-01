@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#EAE6DC;}
+  a{color:#E8623D;}
+  a:hover{color:#c94f2f;}
+</style>
+</helmet>
+
+<div style="width:390px;min-height:844px;background:#F1EEE7;position:relative;overflow:hidden;font-family:'Nunito',sans-serif;margin:0 auto;box-shadow:0 30px 80px rgba(46,40,34,0.18);">
+
+  <div style="padding:24px 20px 4px;">
+    <a href="Travel Guides Screen.dc.html" style="color:#6B6259;font-size:11.5px;font-weight:700;text-decoration:none;display:inline-block;margin-bottom:6px;">← Travel guides</a>
+    <div style="color:#2E2822;font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:700;">Airlines &amp; partners</div>
+    <div style="color:#6B6259;font-size:12.5px;margin-top:3px;line-height:1.4;">Your consultant selects the best airline and route for your pet, weighing breed restrictions, temperature embargoes, transit hub conditions and seasonality — this isn't a self-serve flight picker.</div>
+  </div>
+
+  <div style="padding:16px 20px 40px;display:flex;flex-direction:column;gap:12px;">
+
+    <div style="background:#FFFFFF;border-radius:18px;padding:16px;">
+      <div style="color:#2E2822;font-weight:700;font-size:14px;">British Airways</div>
+      <div style="color:#6B6259;font-size:11px;font-weight:700;margin-top:2px;">Hub: London Heathrow</div>
+      <div style="color:#6B6259;font-size:12px;margin-top:6px;line-height:1.45;">One of the most-used carriers for pet transport, direct to 150+ destinations. Short brachycephalic (snub-nosed breed) restriction list, minimal seasonal temperature restrictions — useful for warm-climate destinations year-round.</div>
+    </div>
+    <div style="background:#FFFFFF;border-radius:18px;padding:16px;">
+      <div style="color:#2E2822;font-weight:700;font-size:14px;">Emirates</div>
+      <div style="color:#6B6259;font-size:11px;font-weight:700;margin-top:2px;">Hub: Dubai (DXB)</div>
+      <div style="color:#6B6259;font-size:12px;margin-top:6px;line-height:1.45;">Wide-body aircraft, no weight/size restriction, no minimum charge — popular for eastbound routes (Australia, New Zealand via Dubai). Carries snub-nosed breeds in cooler months subject to a BOAS health assessment.</div>
+    </div>
+    <div style="background:#FFFFFF;border-radius:18px;padding:16px;">
+      <div style="color:#2E2822;font-weight:700;font-size:14px;">American Airlines</div>
+      <div style="color:#6B6259;font-size:11px;font-weight:700;margin-top:2px;">Direct to 9 major US cities from Heathrow</div>
+      <div style="color:#6B6259;font-size:12px;margin-top:6px;line-height:1.45;">Popular for US-bound pets — wide-body aircraft, multiple daily departures. Does not accept snub-nosed breeds, and has summer temperature embargoes on some routes.</div>
+    </div>
+    <div style="background:#FFFFFF;border-radius:18px;padding:16px;">
+      <div style="color:#2E2822;font-weight:700;font-size:14px;">Lufthansa</div>
+      <div style="color:#6B6259;font-size:11px;font-weight:700;margin-top:2px;">Hub: Frankfurt</div>
+      <div style="color:#6B6259;font-size:12px;margin-top:6px;line-height:1.45;">No snub-nosed breed restrictions, 100+ destinations both west and east. All pets transit through the EU via Frankfurt. Offers a premium pet service for an extra fee.</div>
+    </div>
+    <div style="background:#FFFFFF;border-radius:18px;padding:16px;">
+      <div style="color:#2E2822;font-weight:700;font-size:14px;">Qatar Airways</div>
+      <div style="color:#6B6259;font-size:11px;font-weight:700;margin-top:2px;">Hub: Doha (DOH)</div>
+      <div style="color:#6B6259;font-size:12px;margin-top:6px;line-height:1.45;">Newly rebuilt reception centre in Doha. Restricts most snub-nosed breeds but will carry some other typically-restricted breeds in reinforced crates. Documents only needed at check-in.</div>
+    </div>
+    <div style="background:#FFFFFF;border-radius:18px;padding:16px;">
+      <div style="color:#2E2822;font-weight:700;font-size:14px;">KLM</div>
+      <div style="color:#6B6259;font-size:11px;font-weight:700;margin-top:2px;">Hub: Amsterdam (AMS)</div>
+      <div style="color:#6B6259;font-size:12px;margin-top:6px;line-height:1.45;">Favourable rates and low minimums, 100+ destinations. Few restrictions on snub-nosed breeds with a BOAS assessment.</div>
+    </div>
+
+    <div style="text-align:center;color:#9A9188;font-size:11px;line-height:1.5;padding:4px 10px 0;">A few more partners (Cathay Pacific, SriLankan, Thai, Turkish) will be added here soon.</div>
+
+    <sc-if value="{{ hasNoTrip }}" hint-placeholder-val="{{ false }}">
+    <a href="New Booking Screen.dc.html" style="display:block;text-align:center;background:#EFC26C;color:#2E2822;border-radius:999px;padding:13px 0;font-weight:700;font-size:14px;text-decoration:none;margin-top:10px;">Ready? Get a quote</a>
+    </sc-if>
+    <div style="text-align:center;margin-top:6px;">
+      <a href="#" onClick="{{ toggleTrip }}" style="color:#B4ACA1;font-size:10px;font-weight:700;text-decoration:none;">Preview: {{ toggleLabel }}</a>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">class Component extends DCLogic {
+  state = { hasTrip: true };
+  renderVals() {
+    const { hasTrip } = this.state;
+    return { hasTrip, hasNoTrip: !hasTrip, toggleLabel: hasTrip ? 'no trip yet' : 'active trip', toggleTrip: (e) => { e.preventDefault(); this.setState({ hasTrip: !hasTrip }); } };
+  }
+}</script>
+</body>
+</html>

@@ -1,7 +1,8 @@
 /**
- * Pets by Plane — Global State Store
- * Uses React Context + useReducer for simplicity.
- * Can migrate to Zustand later if needed.
+ * Pets by Plane — Global State Store (V1 Realistic Rebuild)
+ * 
+ * Central flag: `hasBooking` — determines what every screen shows.
+ * Set true when deposit is paid at checkout.
  */
 
 import { createContext, useContext } from 'react';
@@ -17,23 +18,42 @@ import {
 // ─── State Shape ─────────────────────────────────────────────────────
 
 export interface AppState {
+  // Auth
   isAuthenticated: boolean;
+
+  // The single source of truth for app state
+  hasBooking: boolean;
+
+  // User data (populated at checkout)
   owner: Owner | null;
+
+  // Pet data (populated at checkout)
   pets: Pet[];
-  trips: Trip[];
+
+  // Trip data (populated when booking is confirmed)
   activeTrip: Trip | null;
+  trips: Trip[];
+
+  // Consultant (assigned after booking)
   consultant: Consultant | null;
+
+  // Documents (populated by consultant after booking)
   documents: PetDocument[];
+
+  // Quote flow state
+  quoteReady: boolean;
 }
 
 export const initialState: AppState = {
   isAuthenticated: false,
+  hasBooking: false,
   owner: null,
   pets: [],
-  trips: [],
   activeTrip: null,
+  trips: [],
   consultant: null,
   documents: [],
+  quoteReady: false,
 };
 
 // ─── Actions ─────────────────────────────────────────────────────────
@@ -50,6 +70,8 @@ export type AppAction =
   | { type: 'SET_DOCUMENTS'; payload: PetDocument[] }
   | { type: 'ADD_DOCUMENT'; payload: PetDocument }
   | { type: 'UPDATE_DOCUMENT'; payload: PetDocument }
+  | { type: 'SET_BOOKING'; payload: { owner: Owner; pet: Pet; trip: Trip; consultant: Consultant; documents: PetDocument[] } }
+  | { type: 'SET_QUOTE_READY'; payload: boolean }
   | { type: 'LOGOUT' };
 
 // ─── Reducer ─────────────────────────────────────────────────────────
@@ -109,6 +131,23 @@ export function appReducer(state: AppState, action: AppAction): AppState {
           d.id === action.payload.id ? action.payload : d
         ),
       };
+
+    // The key transition: deposit paid → full booking experience
+    case 'SET_BOOKING':
+      return {
+        ...state,
+        isAuthenticated: true,
+        hasBooking: true,
+        owner: action.payload.owner,
+        pets: [action.payload.pet],
+        activeTrip: action.payload.trip,
+        trips: [action.payload.trip],
+        consultant: action.payload.consultant,
+        documents: action.payload.documents,
+      };
+
+    case 'SET_QUOTE_READY':
+      return { ...state, quoteReady: action.payload };
 
     case 'LOGOUT':
       return { ...initialState };

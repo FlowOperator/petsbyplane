@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#EAE6DC;}
+  a{color:#E8623D;}
+  a:hover{color:#c94f2f;}
+</style>
+</helmet>
+
+<div style="width:390px;height:844px;background:#F1EEE7;position:relative;overflow:hidden;font-family:'Nunito',sans-serif;margin:0 auto;box-shadow:0 30px 80px rgba(46,40,34,0.18);display:flex;flex-direction:column;">
+
+  <div style="padding:24px 20px 4px;flex-shrink:0;">
+    <a href="New Booking Screen.dc.html" style="color:#6B6259;font-size:11.5px;font-weight:700;text-decoration:none;display:inline-block;margin-bottom:6px;">← Edit search</a>
+    <div style="color:#2E2822;font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:700;">3 routes available</div>
+    <div style="color:#6B6259;font-size:12.5px;margin-top:3px;">London (LHR) → Los Angeles (LAX) · 1 pet</div>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;padding:16px 20px 20px;display:flex;flex-direction:column;gap:12px;">
+
+    <div onClick="{{ pickDirect }}" style="{{ cardDirect }}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+          <div style="width:36px;height:26px;background:#F1EEE7;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#6B6259;font-size:9px;font-weight:700;flex-shrink:0;">VS</div>
+          <div style="min-width:0;">
+            <div style="color:#2E2822;font-weight:700;font-size:13.5px;white-space:nowrap;">LHR → LAX</div>
+            <span style="background:#EFEBE3;color:#6B6259;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:4px;display:inline-block;">Direct</span>
+          </div>
+        </div>
+        <div style="color:#2E2822;font-weight:700;font-size:15px;">£1,890</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;color:#6B6259;font-size:11.5px;margin-top:12px;border-top:1px solid rgba(46,40,34,0.06);padding-top:10px;">
+        <span style="white-space:nowrap;flex-shrink:0;">Depart 10:45</span><span style="white-space:nowrap;flex-shrink:0;">11h 05m</span><span style="white-space:nowrap;flex-shrink:0;">Arrive 21:50 local</span>
+      </div>
+    </div>
+
+    <div onClick="{{ pickTransit }}" style="{{ cardTransit }}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+          <div style="width:36px;height:26px;background:#F1EEE7;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#6B6259;font-size:9px;font-weight:700;flex-shrink:0;">KLM</div>
+          <div style="min-width:0;">
+            <div style="color:#2E2822;font-weight:700;font-size:13.5px;white-space:nowrap;">LHR → AMS → LAX</div>
+            <span style="background:#EFEBE3;color:#6B6259;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:4px;display:inline-block;">1 stop</span>
+          </div>
+        </div>
+        <div style="color:#2E2822;font-weight:700;font-size:15px;">£1,240</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;color:#6B6259;font-size:11.5px;margin-top:12px;border-top:1px solid rgba(46,40,34,0.06);padding-top:10px;">
+        <span style="white-space:nowrap;flex-shrink:0;">Depart 08:15</span><span style="white-space:nowrap;flex-shrink:0;">15h 40m</span><span style="white-space:nowrap;flex-shrink:0;">Arrive 21:55 local</span>
+      </div>
+    </div>
+
+    <div onClick="{{ pickBudget }}" style="{{ cardBudget }}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+          <div style="width:36px;height:26px;background:#F1EEE7;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#6B6259;font-size:9px;font-weight:700;flex-shrink:0;">AF</div>
+          <div style="min-width:0;">
+            <div style="color:#2E2822;font-weight:700;font-size:13.5px;white-space:nowrap;">LHR → CDG → LAX</div>
+            <span style="background:#EFEBE3;color:#6B6259;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:4px;display:inline-block;">1 stop</span>
+          </div>
+        </div>
+        <div style="color:#2E2822;font-weight:700;font-size:15px;">£1,095</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;color:#6B6259;font-size:11.5px;margin-top:12px;border-top:1px solid rgba(46,40,34,0.06);padding-top:10px;">
+        <span style="white-space:nowrap;flex-shrink:0;">Depart 07:20</span><span style="white-space:nowrap;flex-shrink:0;">17h 10m</span><span style="white-space:nowrap;flex-shrink:0;">Arrive 22:30 local</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="flex-shrink:0;background:#FFFFFF;border-top:1px solid rgba(46,40,34,0.08);padding:16px 20px 22px;box-shadow:0 -8px 24px rgba(46,40,34,0.06);">
+    <button onClick="{{ continueToAddons }}" style="width:100%;background:#EFC26C;color:#2E2822;border:none;border-radius:999px;padding:15px 0;font-family:'Nunito',sans-serif;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 8px 20px rgba(239,194,108,0.5);">Continue with selected route</button>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  state = { selected: 'transit' };
+  cardStyle(active) {
+    return { background: '#FFFFFF', borderRadius: 20, padding: '16px 16px', border: active ? '1.5px solid #E8623D' : '1.5px solid rgba(46,40,34,0.1)', cursor: 'pointer' };
+  }
+  renderVals() {
+    const { selected } = this.state;
+    return {
+      cardDirect: this.cardStyle(selected === 'direct'),
+      cardTransit: this.cardStyle(selected === 'transit'),
+      cardBudget: this.cardStyle(selected === 'budget'),
+      pickDirect: () => this.setState({ selected: 'direct' }),
+      pickTransit: () => this.setState({ selected: 'transit' }),
+      pickBudget: () => this.setState({ selected: 'budget' }),
+      continueToAddons: () => { window.location.href = 'Quote Booking Screen.dc.html'; }
+    };
+  }
+}
+</script>
+</body>
+</html>

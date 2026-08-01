@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#EAE6DC;}
+  a{color:#E8623D;}
+  a:hover{color:#c94f2f;}
+</style>
+</helmet>
+
+<div style="width:390px;min-height:844px;background:#F1EEE7;position:relative;overflow:hidden;font-family:'Nunito',sans-serif;margin:0 auto;box-shadow:0 30px 80px rgba(46,40,34,0.18);">
+
+  <div style="padding:26px 20px 6px;">
+    <div style="color:#2E2822;font-family:'Baloo 2',sans-serif;font-size:22px;font-weight:700;">Darcy's Documents</div>
+    <div style="color:#6B6259;font-size:13px;font-weight:600;margin-top:2px;">Everything needed for LHR → LAX</div>
+    <div style="margin-top:14px;display:flex;align-items:center;gap:10px;">
+      <div style="flex:1;height:8px;background:#E4DFD4;border-radius:999px;overflow:hidden;">
+        <div style="width:40%;height:100%;background:#E8623D;border-radius:999px;"></div>
+      </div>
+      <span style="color:#6B6259;font-size:12px;font-weight:700;flex-shrink:0;">2 of 5 ready</span>
+    </div>
+    <div style="text-align:right;margin-top:6px;">
+      <a href="#" onClick="{{ toggleTrip }}" style="color:#B4ACA1;font-size:10.5px;font-weight:700;text-decoration:none;">Preview: {{ toggleLabel }}</a>
+    </div>
+  </div>
+
+  <sc-if value="{{ hasNoTrip }}" hint-placeholder-val="{{ false }}">
+  <div style="margin:24px 20px 40px;background:#FFFFFF;border-radius:28px;padding:36px 24px;text-align:center;box-shadow:0 8px 24px rgba(46,40,34,0.06);">
+    <div style="width:72px;height:72px;border-radius:50%;background:rgba(46,40,34,0.06);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="14" height="16" rx="2" stroke="#6B6259" stroke-width="1.6"/><path d="M9 9h6M9 13h6M9 17h3" stroke="#6B6259" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </div>
+    <div style="color:#2E2822;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16.5px;">No documents needed yet</div>
+    <div style="color:#6B6259;font-size:13px;margin-top:8px;line-height:1.5;">Once your trip is booked, we'll list exactly what's required here.</div>
+    <a href="New Booking Screen.dc.html" style="display:inline-block;margin-top:20px;background:#EFC26C;color:#2E2822;border:none;border-radius:999px;padding:13px 28px;font-weight:700;font-size:14px;text-decoration:none;">Get a quote</a>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ hasTrip }}" hint-placeholder-val="{{ true }}">
+  <div style="padding:16px 20px 100px;display:flex;flex-direction:column;gap:12px;">
+
+    <!-- Microchip - verified -->
+    <div style="background:#FFFFFF;border-radius:22px;padding:16px;box-shadow:0 6px 18px rgba(46,40,34,0.06);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(107,140,107,0.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="5" y="5" width="14" height="14" rx="2" stroke="#4C8B6B" stroke-width="1.7"/><circle cx="12" cy="12" r="2.2" stroke="#4C8B6B" stroke-width="1.7"/><path d="M9 5v2M15 5v2M9 17v2M15 17v2M5 9h2M5 15h2M17 9h2M17 15h2" stroke="#4C8B6B" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div style="flex:1;min-width:0;color:#2E2822;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14.5px;line-height:1.3;">Microchip confirmation</div>
+            <span style="background:rgba(76,139,107,0.14);color:#4C8B6B;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;">✓ Verified</span>
+          </div>
+          <div style="color:#6B6259;font-size:12.5px;margin-top:4px;line-height:1.4;">Confirms Darcy can be identified on arrival</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rabies vaccination - verified -->
+    <div style="background:#FFFFFF;border-radius:22px;padding:16px;box-shadow:0 6px 18px rgba(46,40,34,0.06);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(107,140,107,0.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M8 15V9a2 2 0 0 1 2-2h1V5h2v2h1a2 2 0 0 1 2 2v6" stroke="#4C8B6B" stroke-width="1.7" stroke-linecap="round"/><path d="M6 15h12l-1.2 3.5a2 2 0 0 1-1.9 1.5H9.1a2 2 0 0 1-1.9-1.5L6 15z" stroke="#4C8B6B" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div style="flex:1;min-width:0;color:#2E2822;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14.5px;line-height:1.3;">Rabies vaccination record</div>
+            <span style="background:rgba(76,139,107,0.14);color:#4C8B6B;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;">✓ Verified</span>
+          </div>
+          <div style="color:#6B6259;font-size:12.5px;margin-top:4px;line-height:1.4;">Required proof Darcy is protected against rabies</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Titre test - expiring soon -->
+    <div style="background:#FFFFFF;border-radius:22px;padding:16px;box-shadow:0 6px 18px rgba(46,40,34,0.06);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(239,194,108,0.28);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#B7801F" stroke-width="1.7"/><path d="M12 8v4l3 2" stroke="#B7801F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div style="flex:1;min-width:0;color:#2E2822;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14.5px;line-height:1.3;">Rabies antibody titre test (RNATT)</div>
+            <span style="background:rgba(239,194,108,0.35);color:#8A6218;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;">Expiring soon</span>
+          </div>
+          <div style="color:#6B6259;font-size:12.5px;margin-top:4px;line-height:1.4;">Confirms the vaccine has taken effect in Darcy's blood</div>
+          <div style="color:#8A6218;font-size:11.5px;font-weight:700;margin-top:6px;">Valid window closes in 12 days</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export Health Certificate - missing -->
+    <div style="background:#FFFFFF;border-radius:22px;padding:16px;box-shadow:0 6px 18px rgba(46,40,34,0.06);border:1.5px solid rgba(232,98,61,0.28);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(232,98,61,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="14" height="16" rx="2" stroke="#E8623D" stroke-width="1.7"/><path d="M9 9h6M9 13h6M9 17h3" stroke="#E8623D" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div style="flex:1;min-width:0;color:#2E2822;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14.5px;line-height:1.3;">Export Health Certificate</div>
+            <span style="background:#FFFFFF;color:#E8623D;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1.5px solid rgba(232,98,61,0.4);white-space:nowrap;flex-shrink:0;">Missing</span>
+          </div>
+          <div style="color:#6B6259;font-size:12.5px;margin-top:4px;line-height:1.4;">Official sign-off needed before Darcy can fly</div>
+        </div>
+      </div>
+      <button style="margin-top:12px;width:100%;background:#EFC26C;color:#2E2822;border:none;border-radius:999px;padding:11px 0;font-family:'Nunito',sans-serif;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 8a2 2 0 0 1 2-2h1.2l.9-1.4A1.5 1.5 0 0 1 9.4 4h5.2a1.5 1.5 0 0 1 1.3.7L16.8 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z" stroke="#2E2822" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3.4" stroke="#2E2822" stroke-width="1.6"/></svg>
+        Upload
+      </button>
+    </div>
+
+    <!-- CDC import permit - missing -->
+    <div style="background:#FFFFFF;border-radius:22px;padding:16px;box-shadow:0 6px 18px rgba(46,40,34,0.06);border:1.5px solid rgba(232,98,61,0.28);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(232,98,61,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 3 4 6.5v5.7C4 16.8 7.3 20 12 21c4.7-1 8-4.2 8-8.8V6.5L12 3z" stroke="#E8623D" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12.2l2.2 2.2L15.5 10" stroke="#E8623D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div style="flex:1;min-width:0;color:#2E2822;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14.5px;line-height:1.3;">USA CDC import permit</div>
+            <span style="background:#FFFFFF;color:#E8623D;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1.5px solid rgba(232,98,61,0.4);white-space:nowrap;flex-shrink:0;">Missing</span>
+          </div>
+          <div style="color:#6B6259;font-size:12.5px;margin-top:4px;line-height:1.4;">Clears Darcy for entry with US customs</div>
+        </div>
+      </div>
+      <button style="margin-top:12px;width:100%;background:#EFC26C;color:#2E2822;border:none;border-radius:999px;padding:11px 0;font-family:'Nunito',sans-serif;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 8a2 2 0 0 1 2-2h1.2l.9-1.4A1.5 1.5 0 0 1 9.4 4h5.2a1.5 1.5 0 0 1 1.3.7L16.8 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z" stroke="#2E2822" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3.4" stroke="#2E2822" stroke-width="1.6"/></svg>
+        Upload
+      </button>
+    </div>
+
+    <div style="text-align:center;color:#6B6259;font-size:12px;line-height:1.5;padding:6px 10px 0;">
+      No rush — your consultant will remind you before anything's due.
+    </div>
+
+  </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  state = { hasTrip: true };
+  renderVals() {
+    const { hasTrip } = this.state;
+    return {
+      hasTrip, hasNoTrip: !hasTrip,
+      toggleLabel: hasTrip ? 'no trip yet' : 'active trip',
+      toggleTrip: (e) => { e.preventDefault(); this.setState({ hasTrip: !hasTrip }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

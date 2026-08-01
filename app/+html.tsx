@@ -38,6 +38,13 @@ export default function Root({ children }: { children: React.ReactNode }) {
           html, body { height: 100%; background-color: #EAE6DC; }
           body { overflow: hidden; }
           #root { display: flex; height: 100%; flex: 1; }
+          /* Accessible focus ring for keyboard navigation */
+          [data-focusvisible-polyfill] { outline: 2px solid #E8623D !important; outline-offset: 2px; }
+          :focus-visible { outline: 2px solid #E8623D; outline-offset: 2px; }
+          /* Smooth scrolling */
+          * { scroll-behavior: smooth; }
+          /* Hide scrollbars but allow scrolling */
+          ::-webkit-scrollbar { width: 0; height: 0; }
         `}} />
       </head>
       <body>{children}</body>

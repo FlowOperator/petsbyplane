@@ -8,6 +8,7 @@ export { Skeleton, SkeletonCard } from './Skeleton';
 export { BackButton } from './BackButton';
 export { PageHeader } from './PageHeader';
 export { TabToggle } from './TabToggle';
+export { StickyFooter } from './StickyFooter';
 export { AcceptanceCard } from './AcceptanceCard';
 export { TrustBadge } from './TrustBadge';
 export { DocumentUploadSheet } from './DocumentUploadSheet';

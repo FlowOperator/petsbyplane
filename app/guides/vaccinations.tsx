@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,6 +7,9 @@ import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { Card, Button } from '../../src/components/ui';
 import { useAppState } from '../../src/services/store';
 import { TabToggle } from '../../src/components/TabToggle';
+
+const DogImage = require('../../assets/dog.svg');
+const CatImage = require('../../assets/cat.svg');
 
 // ─── Data ────────────────────────────────────────────────────────────
 
@@ -131,6 +134,16 @@ export default function VaccinationsScreen() {
           These are the most commonly requested vaccinations for importing a pet.
         </Text>
 
+        {/* Species illustration */}
+        <View style={styles.imageContainer}>
+          <Image
+            source={activeTab === 'dogs' ? DogImage : CatImage}
+            style={styles.speciesImage}
+            resizeMode="contain"
+            accessibilityLabel={activeTab === 'dogs' ? 'Dog illustration' : 'Cat illustration'}
+          />
+        </View>
+
         <TabToggle
           tabs={[
             { key: 'dogs', label: 'Dogs' },
@@ -247,6 +260,9 @@ const styles = StyleSheet.create({
   body: { ...typography.body, color: colors.textSecondary, lineHeight: 22, marginBottom: 12 },
   sectionTitle: { fontFamily: 'Baloo2_700Bold', fontSize: 17, color: colors.textPrimary, marginTop: 24, marginBottom: 8 },
   sectionSubtitle: { ...typography.bodySmall, color: colors.textSecondary, marginBottom: 12 },
+
+  imageContainer: { alignItems: 'center', marginBottom: 12 },
+  speciesImage: { width: 120, height: 110 },
 
   infoCard: { padding: 14, marginBottom: 8 },
   infoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },

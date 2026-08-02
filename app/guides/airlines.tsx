@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { Card, Button } from '../../src/components/ui';
 import { useAppState } from '../../src/services/store';
+
+const DogImage = require('../../assets/dog.svg');
 
 // ─── Data ────────────────────────────────────────────────────────────
 
@@ -166,6 +168,16 @@ export default function AirlinesScreen() {
           We partner with the best to offer the most comfortable, reliable and safest service possible for you and your pet.
         </Text>
 
+        {/* Hero illustration */}
+        <View style={styles.imageContainer}>
+          <Image
+            source={DogImage}
+            style={styles.heroImage}
+            resizeMode="contain"
+            accessibilityLabel="Dog with airplane illustration"
+          />
+        </View>
+
         <Text style={styles.body}>
           We've built strong and lasting relationships with many of the world's leading airlines over the past 25 years. We understand that every journey is unique, so our agents will find the best airline and route considering your pet's type, breed, size, and destination.
         </Text>
@@ -296,6 +308,8 @@ const styles = StyleSheet.create({
   title: { ...typography.h2, color: colors.textPrimary },
 
   intro: { ...typography.body, fontFamily: 'Nunito_600SemiBold', color: colors.textPrimary, lineHeight: 22, marginBottom: 12 },
+  imageContainer: { alignItems: 'center', marginBottom: 16 },
+  heroImage: { width: 140, height: 130 },
   body: { ...typography.body, color: colors.textSecondary, lineHeight: 22, marginBottom: 12 },
   sectionTitle: { fontFamily: 'Baloo2_700Bold', fontSize: 17, color: colors.textPrimary, marginTop: 24, marginBottom: 12 },
 

@@ -8,6 +8,7 @@ import { Card, Button } from '../../src/components/ui';
 import { useAppState } from '../../src/services/store';
 
 const DogImage = require('../../assets/dog.svg');
+const CatImage = require('../../assets/cat.svg');
 
 const FIELD_COLORS = ['#E8623D', '#2B3A67', '#7B5EA7', '#4C8B6B'] as const;
 
@@ -146,6 +147,16 @@ export default function CratesScreen() {
 
         {/* Acclimatisation */}
         <Text style={styles.sectionTitle}>Crate acclimatisation</Text>
+
+        <View style={styles.imageContainer}>
+          <Image
+            source={CatImage}
+            style={styles.catImage}
+            resizeMode="contain"
+            accessibilityLabel="Cat illustration"
+          />
+        </View>
+
         <Text style={styles.body}>
           When you book with Pets by Plane, we can deliver your pet's travel crate well in advance of the flight. This gives your pet time to get comfortable — especially helpful for nervous pets or distant destinations where they'll be in the crate for an extended period.
         </Text>
@@ -218,6 +229,7 @@ const styles = StyleSheet.create({
   // Measurements
   imageContainer: { alignItems: 'center', marginBottom: 16 },
   dogImage: { width: 160, height: 140 },
+  catImage: { width: 120, height: 110 },
   measurementsList: { gap: 14, marginBottom: 8 },
   measurementRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   measurementBadge: { width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', marginTop: 2 },

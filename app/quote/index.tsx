@@ -71,7 +71,12 @@ export default function QuoteSearchScreen() {
         breed: breed || 'Labrador Retriever',
       },
     });
-    router.push('/quote/flight-results');
+    // Dogs need measurements for crate sizing; cats/birds/exotics skip this step
+    if (petType === 'dog') {
+      router.push('/quote/measurements');
+    } else {
+      router.push('/quote/flight-results');
+    }
   };
 
   const handlePopularRoute = (from: string, fromCity: string, to: string, toCity: string) => {

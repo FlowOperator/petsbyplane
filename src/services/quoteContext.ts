@@ -7,22 +7,26 @@
 
 import { createContext, useContext } from 'react';
 import { QuoteSearchParams, SelectedFlight } from './quoteService';
+import { DogMeasurements } from '../types';
 
 export interface QuoteFlowState {
   searchParams: QuoteSearchParams | null;
   selectedFlight: SelectedFlight | null;
   selectedAddOns: string[];
+  measurements: DogMeasurements | null;
 }
 
 export const initialQuoteState: QuoteFlowState = {
   searchParams: null,
   selectedFlight: null,
   selectedAddOns: [],
+  measurements: null,
 };
 
 export type QuoteFlowAction =
   | { type: 'SET_SEARCH_PARAMS'; payload: QuoteSearchParams }
   | { type: 'SET_SELECTED_FLIGHT'; payload: SelectedFlight }
+  | { type: 'SET_MEASUREMENTS'; payload: DogMeasurements }
   | { type: 'TOGGLE_ADDON'; payload: string }
   | { type: 'RESET' };
 
@@ -32,6 +36,8 @@ export function quoteFlowReducer(state: QuoteFlowState, action: QuoteFlowAction)
       return { ...state, searchParams: action.payload };
     case 'SET_SELECTED_FLIGHT':
       return { ...state, selectedFlight: action.payload };
+    case 'SET_MEASUREMENTS':
+      return { ...state, measurements: action.payload };
     case 'TOGGLE_ADDON': {
       const addOns = state.selectedAddOns.includes(action.payload)
         ? state.selectedAddOns.filter((id) => id !== action.payload)

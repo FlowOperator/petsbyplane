@@ -30,6 +30,7 @@ export default function CheckoutScreen() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [mediaConsent, setMediaConsent] = useState(true); // Default true per T&Cs, but explicit opt-out available
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
@@ -58,6 +59,26 @@ export default function CheckoutScreen() {
           <InputField label="PHONE" placeholder="+44 7700 000000" value={phone} onChangeText={setPhone} keyboardType="phone-pad" />
           <InputField label="PASSWORD" placeholder="Create a password" value={password} onChangeText={setPassword} secureTextEntry />
         </View>
+
+        {/* Media consent — per Section 6.14 of spec */}
+        <TouchableOpacity
+          style={styles.consentRow}
+          onPress={() => setMediaConsent(!mediaConsent)}
+          activeOpacity={0.7}
+          accessibilityRole="switch"
+          accessibilityState={{ checked: mediaConsent }}
+          accessibilityLabel="Allow photos and videos of your pet to be used for marketing"
+        >
+          <View style={[styles.consentCheckbox, mediaConsent && styles.consentCheckboxActive]}>
+            {mediaConsent && <Ionicons name="checkmark" size={14} color={colors.white} />}
+          </View>
+          <View style={styles.consentContent}>
+            <Text style={styles.consentTitle}>Photo & video consent</Text>
+            <Text style={styles.consentDescription}>
+              Allow Pets by Plane to use photos/videos of your pet for social media and marketing. You can change this anytime in settings.
+            </Text>
+          </View>
+        </TouchableOpacity>
 
         {/* Summary card */}
         <Card style={styles.summaryCard}>
@@ -149,6 +170,26 @@ const styles = StyleSheet.create({
   depositLabel: { fontFamily: 'Baloo2_700Bold', fontSize: 16, color: colors.textPrimary },
   depositValue: { fontFamily: 'Baloo2_700Bold', fontSize: 18, color: colors.primary },
   depositNote: { ...typography.tiny, color: colors.textMuted, marginTop: 4 },
+
+  consentRow: {
+    flexDirection: 'row', alignItems: 'flex-start', gap: 12,
+    marginTop: 18, marginBottom: 8, paddingVertical: 4,
+  },
+  consentCheckbox: {
+    width: 22, height: 22, borderRadius: 6,
+    borderWidth: 2, borderColor: colors.borderStrong,
+    alignItems: 'center', justifyContent: 'center', marginTop: 2,
+  },
+  consentCheckboxActive: {
+    backgroundColor: colors.primary, borderColor: colors.primary,
+  },
+  consentContent: { flex: 1 },
+  consentTitle: {
+    ...typography.bodySmall, fontFamily: 'Nunito_700Bold', color: colors.textPrimary,
+  },
+  consentDescription: {
+    ...typography.tiny, color: colors.textSecondary, marginTop: 3, lineHeight: 16,
+  },
 
   bottomArea: {
     position: 'absolute', bottom: 0, left: 0, right: 0,

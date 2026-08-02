@@ -4,15 +4,12 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../src/theme';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const DogImage = require('../assets/dog.svg');
 
@@ -126,8 +123,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   heroImage: {
-    width: SCREEN_WIDTH * 0.55,
-    height: SCREEN_WIDTH * 0.55,
+    width: 200,
+    height: 200,
   },
 
   textArea: {

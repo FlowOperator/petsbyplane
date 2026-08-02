@@ -1,26 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Image,
-  Dimensions,
   Platform,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { colors, typography, radius, shadows, layout } from '../src/theme';
 import { TrustBadge } from '../src/components/TrustBadge';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CatImage = require('../assets/cat.svg');
+const DogImage = require('../assets/dog.svg');
+
+const IMAGES = [
+  { source: CatImage, label: 'Hand-drawn cat with airplane illustration' },
+  { source: DogImage, label: 'Hand-drawn dog with airplane illustration' },
+];
 
 /**
  * Landing Page — light, airy design with illustration focus.
  * Cream/off-white background, bold headline, hand-drawn illustration, CTAs.
+ * Image flips between dog and cat every 4 seconds.
  */
 export default function LandingScreen() {
+  const [imageIndex, setImageIndex] = useState(0);
+  const { width } = Dimensions.get('window');
+  const isWeb = Platform.OS === 'web';
+  const imageSize = isWeb ? Math.min(width * 0.35, 220) : 200;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImageIndex((prev) => (prev + 1) % IMAGES.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentImage = IMAGES[imageIndex];
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <View style={styles.container}>
@@ -29,13 +48,13 @@ export default function LandingScreen() {
           <TrustBadge />
         </View>
 
-        {/* Illustration — prominent and centered */}
+        {/* Illustration — flips between cat and dog */}
         <View style={styles.illustrationArea}>
           <Image
-            source={CatImage}
-            style={styles.heroImage}
+            source={currentImage.source}
+            style={{ width: imageSize, height: imageSize * 0.9 }}
             resizeMode="contain"
-            accessibilityLabel="Hand-drawn cat with airplane illustration"
+            accessibilityLabel={currentImage.label}
           />
         </View>
 
@@ -100,10 +119,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 16,
-  },
-  heroImage: {
-    width: SCREEN_WIDTH * 0.55,
-    height: SCREEN_WIDTH * 0.5,
   },
 
   heroText: { paddingBottom: 12 },

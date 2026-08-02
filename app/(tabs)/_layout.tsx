@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { View, StyleSheet, ColorValue, Platform } from 'react-native';
+import { View, StyleSheet, ColorValue, Platform, Text } from 'react-native';
 import { colors, shadows, typography } from '../../src/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppState } from '../../src/services/store';
@@ -11,6 +11,32 @@ function TabIcon({ name, color, focused }: { name: TabIconName; color: ColorValu
   const iconName = focused ? name : (`${name}-outline` as any);
   return <Ionicons name={iconName} size={22} color={color as string} />;
 }
+
+function LockedTabIcon({ name }: { name: TabIconName }) {
+  return (
+    <View style={lockedStyles.container}>
+      <Ionicons name={`${name}-outline` as any} size={22} color={colors.textDisabled} />
+      <View style={lockedStyles.lockBadge}>
+        <Ionicons name="lock-closed" size={8} color={colors.textMuted} />
+      </View>
+    </View>
+  );
+}
+
+const lockedStyles = StyleSheet.create({
+  container: { position: 'relative' },
+  lockBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -6,
+    backgroundColor: colors.border,
+    borderRadius: 6,
+    width: 14,
+    height: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export default function TabLayout() {
   const { state } = useAppState();
@@ -50,13 +76,12 @@ export default function TabLayout() {
         name="journey"
         options={{
           title: 'Journey',
-          tabBarIcon: ({ color, focused }) => (
-            <TabIcon
-              name="navigate"
-              color={hasBooking ? color : colors.textDisabled}
-              focused={hasBooking ? focused : false}
-            />
-          ),
+          tabBarIcon: ({ color, focused }) =>
+            hasBooking ? (
+              <TabIcon name="navigate" color={color} focused={focused} />
+            ) : (
+              <LockedTabIcon name="navigate" />
+            ),
           tabBarLabelStyle: {
             ...typography.tabLabel,
             marginTop: 2,
@@ -73,13 +98,12 @@ export default function TabLayout() {
         name="documents"
         options={{
           title: 'Documents',
-          tabBarIcon: ({ color, focused }) => (
-            <TabIcon
-              name="document-text"
-              color={hasBooking ? color : colors.textDisabled}
-              focused={hasBooking ? focused : false}
-            />
-          ),
+          tabBarIcon: ({ color, focused }) =>
+            hasBooking ? (
+              <TabIcon name="document-text" color={color} focused={focused} />
+            ) : (
+              <LockedTabIcon name="document-text" />
+            ),
           tabBarLabelStyle: {
             ...typography.tabLabel,
             marginTop: 2,
@@ -96,13 +120,12 @@ export default function TabLayout() {
         name="messages"
         options={{
           title: 'Messages',
-          tabBarIcon: ({ color, focused }) => (
-            <TabIcon
-              name="chatbubble"
-              color={hasBooking ? color : colors.textDisabled}
-              focused={hasBooking ? focused : false}
-            />
-          ),
+          tabBarIcon: ({ color, focused }) =>
+            hasBooking ? (
+              <TabIcon name="chatbubble" color={color} focused={focused} />
+            ) : (
+              <LockedTabIcon name="chatbubble" />
+            ),
           tabBarLabelStyle: {
             ...typography.tabLabel,
             marginTop: 2,

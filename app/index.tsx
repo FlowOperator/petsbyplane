@@ -44,6 +44,11 @@ export default function LandingScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <View style={styles.container}>
+        {/* Skip */}
+        <TouchableOpacity style={styles.skipBtn} onPress={() => router.replace('/(tabs)')}>
+          <Text style={styles.skipText}>Skip</Text>
+        </TouchableOpacity>
+
         {/* Trust badge */}
         <View style={styles.trustRow}>
           <TrustBadge />
@@ -130,6 +135,8 @@ const styles = StyleSheet.create({
   },
 
   trustRow: { alignItems: 'flex-start' },
+  skipBtn: { alignSelf: 'flex-end', paddingVertical: 8, paddingHorizontal: 4 },
+  skipText: { ...typography.bodySmall, fontFamily: 'Nunito_700Bold', color: colors.textSecondary },
 
   illustrationArea: {
     alignItems: 'center',

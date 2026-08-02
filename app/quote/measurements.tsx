@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -14,6 +15,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, radius, shadows, layout } from '../../src/theme';
 import { Card } from '../../src/components/ui';
 import { useQuoteFlow } from '../../src/services/quoteContext';
+
+const DogImage = require('../../assets/dog.svg');
 
 /**
  * Dog Measurements Screen — Step between form and reassurance.
@@ -33,29 +36,31 @@ interface MeasurementField {
   placeholder: string;
 }
 
+const FIELD_COLORS = ['#E8623D', '#2B3A67', '#7B5EA7', '#4C8B6B'] as const;
+
 const FIELDS: MeasurementField[] = [
   {
     key: 'lengthNoseToTail',
-    label: 'Length',
-    description: 'Tip of nose to base of tail',
+    label: 'A',
+    description: 'Length of animal from nose to root of tail',
     placeholder: 'e.g. 75',
   },
   {
     key: 'heightToElbow',
-    label: 'Height to elbow',
-    description: 'Ground to the elbow joint',
+    label: 'B',
+    description: 'Height from ground to elbow joint',
     placeholder: 'e.g. 32',
   },
   {
     key: 'widthAtWidest',
-    label: 'Width',
-    description: 'Widest point (usually shoulders)',
+    label: 'C',
+    description: 'Width across widest section (usually shoulders or head)',
     placeholder: 'e.g. 38',
   },
   {
     key: 'standingHeight',
-    label: 'Standing height',
-    description: 'Ground to top of head or ears',
+    label: 'D',
+    description: 'Height in a natural standing position — from soles of feet to the tallest point (tip of ears or top of head)',
     placeholder: 'e.g. 60',
   },
 ];
@@ -108,6 +113,16 @@ export default function MeasurementsScreen() {
           We use these to size the right IATA-compliant travel crate. All measurements in centimetres.
         </Text>
 
+        {/* Dog illustration */}
+        <View style={styles.imageContainer}>
+          <Image
+            source={DogImage}
+            style={styles.dogImage}
+            resizeMode="contain"
+            accessibilityLabel="Dog illustration showing measurement points"
+          />
+        </View>
+
         {/* Illustration hint */}
         <Card style={styles.hintCard}>
           <View style={styles.hintRow}>
@@ -120,10 +135,14 @@ export default function MeasurementsScreen() {
 
         {/* Measurement fields */}
         <View style={styles.fieldsContainer}>
-          {FIELDS.map((field) => (
+          {FIELDS.map((field, index) => (
             <View key={field.key} style={styles.fieldGroup}>
-              <Text style={styles.fieldLabel}>{field.label.toUpperCase()}</Text>
-              <Text style={styles.fieldDescription}>{field.description}</Text>
+              <View style={styles.fieldHeader}>
+                <View style={[styles.fieldBadge, { backgroundColor: FIELD_COLORS[index] }]}>
+                  <Text style={styles.fieldBadgeText}>{field.label}</Text>
+                </View>
+                <Text style={styles.fieldDescription}>{field.description}</Text>
+              </View>
               <View style={styles.inputRow}>
                 <TextInput
                   style={styles.input}
@@ -132,7 +151,7 @@ export default function MeasurementsScreen() {
                   value={values[field.key] || ''}
                   onChangeText={(v) => handleChange(field.key, v)}
                   keyboardType="numeric"
-                  accessibilityLabel={`${field.label} in centimetres`}
+                  accessibilityLabel={`Measurement ${field.label}: ${field.description}, in centimetres`}
                   maxLength={3}
                 />
                 <Text style={styles.unitLabel}>cm</Text>
@@ -185,18 +204,31 @@ const styles = StyleSheet.create({
   title: { fontFamily: 'Baloo2_700Bold', fontSize: 22, color: colors.textPrimary, marginTop: 8 },
   subtitle: { ...typography.body, color: colors.textSecondary, marginTop: 4, marginBottom: 16, lineHeight: 21 },
 
+  imageContainer: {
+    alignItems: 'center', marginBottom: 16,
+  },
+  dogImage: {
+    width: 160, height: 140,
+  },
+
   hintCard: { padding: 14, marginBottom: 20 },
   hintRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
   hintText: { ...typography.bodySmall, color: colors.textSecondary, flex: 1, lineHeight: 19 },
 
-  fieldsContainer: { gap: 16 },
+  fieldsContainer: { gap: 18 },
   fieldGroup: { marginBottom: 0 },
-  fieldLabel: {
-    ...typography.tiny, fontFamily: 'Nunito_700Bold',
-    color: colors.textSecondary, letterSpacing: 0.3, marginBottom: 2, marginLeft: 4,
+  fieldHeader: {
+    flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginBottom: 8,
+  },
+  fieldBadge: {
+    width: 30, height: 30, borderRadius: 15,
+    alignItems: 'center', justifyContent: 'center', marginTop: 2,
+  },
+  fieldBadgeText: {
+    fontFamily: 'Nunito_700Bold', fontSize: 14, color: colors.white,
   },
   fieldDescription: {
-    ...typography.tiny, color: colors.textMuted, marginBottom: 6, marginLeft: 4,
+    ...typography.body, color: colors.textPrimary, flex: 1, lineHeight: 20,
   },
   inputRow: {
     flexDirection: 'row', alignItems: 'center', gap: 8,

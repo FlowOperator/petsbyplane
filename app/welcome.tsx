@@ -26,7 +26,7 @@ const SLIDES: Slide[] = [
   {
     icon: 'heart',
     title: 'Family-run,\nsince day one',
-    body: "4th-generation animal transport experts. We've been flying pets since before most airlines existed.",
+    body: "We've relocated thousands of pets worldwide, treating every animal like our own.",
   },
   {
     icon: 'shield-checkmark',
@@ -61,28 +61,52 @@ export default function WelcomeScreen() {
           <Text style={styles.skipText}>Skip</Text>
         </TouchableOpacity>
 
-        {/* Content */}
-        <View style={styles.slideArea}>
-          <View style={styles.iconBadge}>
-            <Ionicons name={current.icon} size={48} color={colors.primary} />
-          </View>
-          <Text style={styles.slideTitle}>{current.title}</Text>
-          <Text style={styles.slideBody}>{current.body}</Text>
+        {/* Illustration */}
+        <View style={styles.illustrationArea}>
+          <Image
+            source={DogImage}
+            style={styles.heroImage}
+            resizeMode="contain"
+            accessibilityLabel="Hand-drawn dog with airplane illustration"
+          />
         </View>
 
-        {/* Bottom */}
-        <View style={styles.bottomArea}>
+        {/* Text content */}
+        <View style={styles.textArea}>
+          <Text style={styles.slideTitle}>{current.title}</Text>
+          <Text style={styles.slideBody}>{current.body}</Text>
+
           {/* Dots */}
           <View style={styles.dotsRow}>
             {SLIDES.map((_, i) => (
               <View key={i} style={[styles.dot, i === slide && styles.dotActive]} />
             ))}
           </View>
+        </View>
 
-          {/* CTA */}
-          <TouchableOpacity style={styles.ctaBtn} onPress={handleNext} activeOpacity={0.85}>
-            <Text style={styles.ctaText}>{isLast ? 'Get started' : 'Next'}</Text>
+        {/* Bottom CTAs */}
+        <View style={styles.bottomArea}>
+          <TouchableOpacity style={styles.ctaBtn} onPress={() => router.push('/quote')} activeOpacity={0.85}>
+            <Text style={styles.ctaText}>Get a free quote</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.signInBtn}
+            onPress={() => router.push('/auth/signin')}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.signInText}>Sign in</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push('/auth/signup')}>
+            <Text style={styles.createAccountText}>
+              New here? <Text style={styles.createAccountLink}>Create an account</Text>
+            </Text>
+          </TouchableOpacity>
+
+          <Text style={styles.termsText}>
+            By continuing, you agree to our Terms and Privacy Policy
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -90,36 +114,68 @@ export default function WelcomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: colors.background },
+  safeArea: { flex: 1, backgroundColor: '#F7F5F0' },
   container: { flex: 1, paddingHorizontal: layout.screenPaddingHorizontal },
   skipBtn: { alignSelf: 'flex-end', paddingVertical: 12, marginTop: 8 },
   skipText: { ...typography.bodySmall, fontFamily: 'Nunito_700Bold', color: colors.textSecondary },
 
-  slideArea: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingBottom: 40 },
-  iconBadge: {
-    width: 140, height: 140, borderRadius: 70,
-    backgroundColor: colors.primaryLight,
-    alignItems: 'center', justifyContent: 'center',
-    marginBottom: 28,
+  illustrationArea: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+  },
+  heroImage: {
+    width: SCREEN_WIDTH * 0.55,
+    height: SCREEN_WIDTH * 0.55,
+  },
+
+  textArea: {
+    paddingBottom: 20,
   },
   slideTitle: {
-    fontFamily: 'Baloo2_700Bold', fontSize: 22, color: colors.textPrimary,
-    textAlign: 'center', lineHeight: 30,
+    fontFamily: 'Baloo2_700Bold', fontSize: 26, color: colors.textPrimary,
+    lineHeight: 34,
   },
   slideBody: {
-    ...typography.bodySmall, color: colors.textSecondary,
-    textAlign: 'center', marginTop: 12, lineHeight: 20,
-    maxWidth: 280,
+    ...typography.body, color: colors.textSecondary,
+    marginTop: 8, lineHeight: 22,
+    maxWidth: 320,
   },
 
-  bottomArea: { paddingBottom: 20, gap: 16 },
-  dotsRow: { flexDirection: 'row', justifyContent: 'center', gap: 8 },
-  dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#E4DFD4' },
-  dotActive: { backgroundColor: colors.primary, width: 24 },
+  dotsRow: { flexDirection: 'row', gap: 8, marginTop: 16 },
+  dot: { width: 24, height: 8, borderRadius: 4, backgroundColor: '#E4DFD4' },
+  dotActive: { backgroundColor: colors.primary },
 
+  bottomArea: { paddingBottom: 24, gap: 12 },
   ctaBtn: {
     backgroundColor: colors.secondary, borderRadius: radius.pill,
     paddingVertical: 16, alignItems: 'center', ...shadows.button,
   },
   ctaText: { ...typography.button, color: colors.textPrimary },
+
+  signInBtn: {
+    borderWidth: 1.5,
+    borderColor: colors.borderStrong,
+    borderRadius: radius.pill,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  signInText: { ...typography.button, color: colors.textPrimary },
+
+  createAccountText: {
+    ...typography.bodySmall, color: colors.textSecondary,
+    textAlign: 'center', marginTop: 4,
+  },
+  createAccountLink: {
+    color: colors.primary,
+    fontFamily: 'Nunito_700Bold',
+  },
+  termsText: {
+    ...typography.bodySmall,
+    color: colors.textMuted,
+    textAlign: 'center',
+    fontSize: 11,
+    marginTop: 4,
+  },
 });

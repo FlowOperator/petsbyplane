@@ -1,0 +1,414 @@
+/* Pets by Plane Staff Portal — Global Styles */
+:root {
+  --bg: #F1EEE7;
+  --bg-outer: #EAE6DC;
+  --card: #FFFFFF;
+  --primary: #E8623D;
+  --primary-light: rgba(232, 98, 61, 0.1);
+  --secondary: #EFC26C;
+  --success: #4C8B6B;
+  --success-light: rgba(76, 139, 107, 0.12);
+  --warning: #8A6218;
+  --warning-bg: rgba(239, 194, 108, 0.25);
+  --text-primary: #2E2822;
+  --text-secondary: #6B6259;
+  --text-muted: #9A9188;
+  --border: rgba(46, 40, 34, 0.08);
+  --border-medium: rgba(46, 40, 34, 0.12);
+  --shadow: 0 2px 12px rgba(46, 40, 34, 0.06);
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 50px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin-bottom: 20px;
+}
+
+.sidebar-brand-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--primary-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.sidebar-brand h2 {
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-nav-item:hover {
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+.sidebar-nav-item.active {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.sidebar-nav-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.main-content {
+  margin-left: 240px;
+  flex: 1;
+  padding: 32px;
+  max-width: 1100px;
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+/* Trip table */
+.trip-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.trip-table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding: 0 12px 8px;
+}
+
+.trip-row {
+  background: var(--card);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s;
+}
+
+.trip-row:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(46, 40, 34, 0.1);
+}
+
+.trip-row td {
+  padding: 14px 12px;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.trip-row td:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.trip-row td:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+
+/* Status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.status-badge.active { background: var(--success-light); color: var(--success); }
+.status-badge.pending { background: var(--warning-bg); color: var(--warning); }
+.status-badge.completed { background: var(--bg); color: var(--text-muted); }
+.status-badge.quote { background: var(--primary-light); color: var(--primary); }
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Source badges */
+.source-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.source-badge.app { background: var(--primary-light); color: var(--primary); }
+.source-badge.website { background: rgba(43, 58, 103, 0.1); color: #2B3A67; }
+
+/* Milestone timeline */
+.milestone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.milestone-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 0;
+  position: relative;
+}
+
+.milestone-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 40px;
+  bottom: -14px;
+  width: 2px;
+  background: var(--border-medium);
+}
+
+.milestone-item.completed:not(:last-child)::after {
+  background: var(--success);
+}
+
+.milestone-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  border: 2px solid var(--border-medium);
+  background: var(--card);
+  color: var(--text-muted);
+}
+
+.milestone-item.completed .milestone-dot {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.milestone-item.current .milestone-dot {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 98, 61, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(232, 98, 61, 0); }
+}
+
+.milestone-content { flex: 1; }
+.milestone-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.milestone-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.milestone-date { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+.milestone-action {
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.milestone-action.mark-done {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.milestone-action.mark-done:hover {
+  background: var(--success);
+  color: white;
+}
+
+/* Page header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  font-size: 24px;
+  color: var(--text-primary);
+}
+
+/* Stats row */
+.stats-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  flex: 1;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.stat-number {
+  font-family: 'Baloo 2', cursive;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-primary { background: var(--secondary); color: var(--text-primary); }
+.btn-primary:hover { filter: brightness(0.95); }
+
+/* Detail view */
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.detail-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border: 3px solid var(--text-primary);
+}
+
+.detail-meta { flex: 1; }
+.detail-name { font-family: 'Baloo 2', cursive; font-size: 20px; }
+.detail-route { font-size: 14px; color: var(--text-secondary); }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.detail-field-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.detail-field-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .stats-row {
+    flex-direction: column;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trip-table { font-size: 13px; }
+}

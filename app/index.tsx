@@ -7,6 +7,7 @@ import {
   Image,
   Platform,
   Dimensions,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -17,8 +18,8 @@ const CatImage = require('../assets/cat.svg');
 const DogImage = require('../assets/dog.svg');
 
 const IMAGES = [
-  { source: CatImage, label: 'Hand-drawn cat with airplane illustration' },
   { source: DogImage, label: 'Hand-drawn dog with airplane illustration' },
+  { source: CatImage, label: 'Hand-drawn cat with airplane illustration' },
 ];
 
 /**
@@ -95,7 +96,22 @@ export default function LandingScreen() {
           </TouchableOpacity>
 
           <Text style={styles.termsText}>
-            By continuing, you agree to our Terms and Privacy Policy
+            By continuing, you agree to our{' '}
+            <Text
+              style={styles.termsLink}
+              onPress={() => Linking.openURL('https://www.petsbyplane.com/terms-and-conditions')}
+              accessibilityRole="link"
+            >
+              Terms
+            </Text>
+            {' '}and{' '}
+            <Text
+              style={styles.termsLink}
+              onPress={() => Linking.openURL('https://www.petsbyplane.com/privacy-policy')}
+              accessibilityRole="link"
+            >
+              Privacy Policy
+            </Text>
           </Text>
         </View>
       </View>
@@ -178,5 +194,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 11,
     marginTop: 4,
+  },
+  termsLink: {
+    color: colors.primary,
+    textDecorationLine: 'underline',
   },
 });
